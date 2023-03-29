@@ -5,7 +5,8 @@ Omar Moreno
 
 ## Configuración del ambiente
 Para configurar el ambiente, debemos tener en encuenta haber instalado XAMPP y configurar el archivo .env (Este archivo no se carga a GIT)
-instrucciones en este video de youtube https://www.youtube.com/watch?v=p3losLFA0aQ&
+
+Instrucciones en este video de youtube https://www.youtube.com/watch?v=p3losLFA0aQ&
 ## Tener en cuenta los siguientes comandos para ejecutar en el proyecto
 1. Crear proyecto en laravel
     composer create-project laravel/laravel <project-name>
