@@ -1,6 +1,8 @@
-# educonecta
+# Educonecta
 Proyecto de tesis.
+
 Cristhian Hurtado
+
 Omar Moreno
 
 ## Configuración del ambiente
