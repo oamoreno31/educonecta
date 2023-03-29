@@ -29,6 +29,7 @@
 
 <body class="index-page">
     @extends('layouts.footer_template')
+    <main class="py-4">@yield('content')</main>
     @extends('layouts.template')
     @section('page_title','Educonecta')
 
