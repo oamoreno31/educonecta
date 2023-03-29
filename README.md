@@ -11,9 +11,9 @@ Para configurar el ambiente, debemos tener en encuenta haber instalado XAMPP y c
 Instrucciones en este video de youtube https://www.youtube.com/watch?v=p3losLFA0aQ&
 ## Tener en cuenta los siguientes comandos para ejecutar en el proyecto
 1. Crear proyecto en laravel
-    composer create-project laravel/laravel <project-name>
+    composer create-project laravel/laravel <b>project-name</b>
 2. Crear tabla en base de datos
-    php artisan make:migration <table-name>
+    php artisan make:migration <b>table-name</b>
 3. Subir tablas creadas a la base de datos
     php artisan migrate
 4. Refrescar la base de datos (TENER EN CUENTA QUE ESTE COMANDO ELIMINARÁ Y VOLVERÁ A CREAR LA BASE DE DATOS)
