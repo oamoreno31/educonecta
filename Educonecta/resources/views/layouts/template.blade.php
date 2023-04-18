@@ -22,7 +22,7 @@
                     <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center"
                         href="javascript:;" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
                         Pages
-                        <img src="./assets/img/down-arrow-dark.svg" alt="down-arrow" class="arrow ms-1">
+                        <img src="/UProyecto/Educonecta/public/assets/img/down-arrow-dark.svg" alt="down-arrow" class="arrow ms-1">
                     </a>
                     <div class="dropdown-menu dropdown-menu-animation dropdown-md p-3 border-radius-lg mt-0 mt-lg-3"
                         aria-labelledby="dropdownMenuPages">
@@ -97,7 +97,12 @@
                 <li class="nav-item my-auto ms-3 ms-lg-0 dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->name }}
+                        @if (Auth::user()->role == 'teacher') 
+                            <span class="badge bg-success">Maestro</span>
+                        @elseif (Auth::user()->role == 'student') 
+                            <span class="badge bg-success">Estudiante</span>
+                        @endif
+                        | {{ Auth::user()->name }}
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
