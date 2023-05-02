@@ -41,10 +41,16 @@ You can't access to this page
                             <div class="card mb-4">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $publicacione->titulo }}</h5>
-                                    <p class="card-text">{{ $publicacione->descripcion }}</p>
+                                    <p class="card-text" style="margin-left: 20px; font-weight: bold;">{{ $publicacione->descripcion }}</p>
                                     <p class="card-text"><b>Autor: </b>{{ $publicacione->author_name }}</p>
                                     <form action="{{ route('publicaciones.destroy',$publicacione->id) }}" method="POST">
                                     <a href="{{ route('publicaciones.show',$publicacione->id) }}" class="btn btn-primary">Leer más</a>
+                                    @if (Auth::user()->documentId == $publicacione->author_id and Auth::user()->role == 'teacher')
+                                        <a href="{{ route('publicaciones.edit',$publicacione->id) }}" class="btn btn-warning">Editar</a>
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-fw fa-trash"></i> Eliminar</button>
+                                    @endif
                                     </form>
                                 </div>
                             </div>
