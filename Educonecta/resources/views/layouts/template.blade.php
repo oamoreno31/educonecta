@@ -21,64 +21,25 @@
                 <li class="nav-item dropdown dropdown-hover mx-2">
                     <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center"
                         href="javascript:;" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
-                        Pages
+                        Configuraciones
                         <img src="/UProyecto/Educonecta/public/assets/img/down-arrow-dark.svg" alt="down-arrow" class="arrow ms-1">
                     </a>
                     <div class="dropdown-menu dropdown-menu-animation dropdown-md p-3 border-radius-lg mt-0 mt-lg-3"
                         aria-labelledby="dropdownMenuPages">
                         <div class="d-none d-lg-block">
-                            <div
-                                class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0">
-                                Landing Pages
-                            </div>
-                            <a href="./pages/about-us.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">About Us</span>
-                            </a>
-                            <a href="./pages/contact-us.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">Contact Us</span>
-                            </a>
-                            <a href="./pages/author.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">Author</span>
-                            </a>
-                            <div
-                                class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0 mt-3">
-                                Account
-                            </div>
-                            <a href="./pages/sign-in.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">Sign In</span>
-                            </a>
+                            <a href="{{ route('home') }}" class="dropdown-item border-radius-md"> <span class="ps-3">home</span> </a>
+                            <a href="{{ route('categories.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Categorias</span> </a>
+                            <a href="{{ route('tags.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Tags</span> </a>
+                            <a href="{{ route('roles.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Roles</span> </a>
+                            <a href="{{ route('permissions.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Permisos</span> </a>
                         </div>
-
-                        <div class="d-lg-none">
-                            <div
-                                class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0">
-                                Landing Pages
-                            </div>
-
-                            <a href="./pages/about-us.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">About Us</span>
-                            </a>
-                            <a href="./pages/contact-us.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">Contact Us</span>
-                            </a>
-                            <a href="./pages/author.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">Author</span>
-                            </a>
-
-                            <div
-                                class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0 mt-3">
-                                Account
-                            </div>
-                            <a href="./pages/sign-in.html" class="dropdown-item border-radius-md">
-                                <span class="ps-3">Sign In</span>
-                            </a>
-
-                        </div>
-
                     </div>
                 </li>
 
-                <li class="nav-item dropdown dropdown-hover mx-2"></li>
+                <li class="nav-item dropdown dropdown-hover mx-2">
+                    <a href="{{ route('posts.index') }}"class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" > Publicaciones </a> 
+                </li>
+                
                 <li class="nav-item dropdown dropdown-hover mx-2"></li>
                 <li class="nav-item ms-lg-auto"></li>
                 @guest
