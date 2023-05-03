@@ -1,9 +1,9 @@
-<script src="/UProyecto/Educonecta/vendor/tinymce/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="{{ asset('assets/vendor/tinymce/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
 
 <script> tinymce.init({ selector: '#content' }); </script>
 <div class="box box-info padding-1">
     <div class="box-body">
-        
+
         <div class="form-group">
             {{ Form::label('title') }}
             {{ Form::text('title', $post->title, ['class' => 'form-control' . ($errors->has('title') ? ' is-invalid' : ''), 'placeholder' => 'Titel']) }}
