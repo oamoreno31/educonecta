@@ -13,14 +13,14 @@ return new class extends Migration
     {
         //
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('publicaciones');
-        Schema::create('publicaciones', function (Blueprint $table) {
+        Schema::dropIfExists('posts');
+        Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             
-            $table->string('titulo');
-            $table->string('descripcion');
-            $table->longText('contenido');
-            $table->timestamp('fecha_publicacion');
+            $table->string('title');
+            $table->string('description');
+            $table->longText('content');
+            $table->timestamp('post_date');
 
             // $table->dropColumn('fecha_publicacion');
 
@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('posts');
     }
 };
