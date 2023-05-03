@@ -38,7 +38,38 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="row mb-3">
+                            <label for="documentId" class="col-md-4 col-form-label text-md-end">{{ __('Tipo de Documento') }}</label>
 
+                            <div class="col-md-6">
+                                <select id="documentType" class="form-control @error('documentType') is-invalid @enderror" name="documentType"
+                                    required autocomplete="new-documentType">
+                                    <option value="" disabled selected>-- Seleccione una Opción --</option>
+                                    <option value="CC">Cédula de Ciudadanía</option>
+                                    <option value="TI">Tarjeta de Identidad</option>
+                                    <option value="TE">Tarjeta de Extranjería</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="documentId" class="col-md-4 col-form-label text-md-end">{{ __('Numero de documento') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="documentId" type="text" class="form-control @error('documentId') is-invalid @enderror" name="documentId" value="{{ old('documentId') }}" required autocomplete="documentId">
+
+                                @error('documentId')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
@@ -58,6 +89,27 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            </div>
+                        </div>
+                        
+
+                        <div class="row mb-3">
+                            <label for="role" class="col-md-4 col-form-label text-md-end">{{ __('Rol') }}</label>
+
+                            <div class="col-md-6">
+                                
+                                <select id="role" class="form-control @error('role') is-invalid @enderror" name="role"
+                                    required autocomplete="new-role">
+                                    <option value="" disabled selected>-- Seleccione una Opción --</option>
+                                    <option value="teacher">Maestro</option>
+                                    <option value="student">Estudiante</option>
+                                </select>
+
+                                @error('role')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
