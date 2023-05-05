@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 /**
@@ -43,12 +44,12 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all()["posts_id"]);
         request()->validate(Comment::$rules);
 
         $comment = Comment::create($request->all());
 
-        return redirect()->route('comments.index')
-            ->with('success', 'Comment created successfully.');
+        return redirect()->route('posts.show', $request->all()["posts_id"]);
     }
 
     /**

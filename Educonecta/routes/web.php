@@ -20,7 +20,7 @@ Route::get('/', function () {
     $notlogged = Route::redirect('/', '/login');
 
     if (Auth::user() == ''){
-        return view('auth/login'); 
+        return view('auth/login');
     }else{
         return view('welcome');
     }
