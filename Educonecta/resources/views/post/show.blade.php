@@ -1,7 +1,26 @@
 @extends('layouts.app')
 
+@php
+    function time_at($fecha)
+    {
+        $segundos = time() - strtotime($fecha);
+        $minutos = floor($segundos / 60);
+        $horas = floor($segundos / 3600);
+        $dias = floor($segundos / 86400);
+        if ($segundos < 60) {
+            return 'hace unos segundos';
+        } elseif ($minutos < 60) {
+            return "hace {$minutos} minutos";
+        } elseif ($horas < 24) {
+            return "hace {$horas} horas";
+        } else {
+            return "hace {$dias} días";
+        }
+    }
+@endphp
+
 @section('template_title')
-    {{ $post->name ?? "{{ __('Show') Post" }}
+    {{ isset($post->name) ? $post->name : __('Show Post') }}
 @endsection
 
 @section('content')
@@ -18,62 +37,65 @@
                                     <strong>Descripción:</strong> {{ $post->description }}
                                 </div>
                                 <div class="col-lg-2">
-                                    <strong>Categoria:</strong> Categoria<br/>
+                                    <strong>Categoria:</strong> Categoria<br />
                                     <strong>Tags:</strong>
                                     <span class="badge text-bg-success">Success</span>
                                     <span class="badge text-bg-success">Success</span>
-                                    <span class="badge text-bg-success">Success</span><br/>
-                                    <strong>Autor:</strong> {{ $post->author_name }}<br/>
-                                    <strong>Fecha:</strong> {{date("d/m/Y", strtotime($post->post_date));}}
+                                    <span class="badge text-bg-success">Success</span><br />
+                                    <strong>Autor:</strong> {{ $post->author_name }}<br />
+                                    <strong>Fecha:</strong> {{ date('d/m/Y', strtotime($post->post_date)) }}
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="card-body">
-                            {!! $post->content !!}
+                        {!! $post->content !!}
                     </div>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="card">
-                  <div class="card-header">Interacciones</div>
-                  <div class="card-body">
-                    <div class="media">
-                      <div class="media-body row">
-                        <div class="col-md-12 d-grid gap-2">
-                          <button class="btn btn-outline-primary" type="button">Me Gusta</button>
-                          <button class="btn btn-primary" type="button">Me Gusta</button>
+                    <div class="card-header">Interacciones</div>
+                    <div class="card-body">
+                        <div class="media">
+                            <div class="media-body row">
+                                <div class="col-md-12 d-grid gap-2">
+                                    <button class="btn btn-outline-primary" type="button">Me Gusta</button>
+                                    <button class="btn btn-primary" type="button">Me Gusta</button>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
-                </div>
-                <hr>
-                <div class="card">
-                  <div class="card-header">Comentarios</div>
-                  <div class="card-body">
-                    <div class="media">
-                      <div class="media-body row">
-                        <div class="col-md-12">
-                          <input type="text" class="form-control" placeholder="Escribe un comentario">
-                        </div><hr>
-                        <div class="col-md-12 d-grid gap-2">
-                          <button class="btn btn-outline-success"  type="button">Publicar</button>
-                        </div>
-                      </div>
-                    </div>
-                    <hr style="border-bottom: 1px solid black;">
-                    <div class="media">
-                      <div class="media-body">
-                        <h6 class="mt-0">Nombre de usuario</h6>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
-                      </div>
-                    </div>
-                    <hr>
-                  </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 mt-5">
+                <div class="card">
+                    <div class="card-header">
+                        Comentarios
+                    </div>
+                    <div class="card-body">
+                        @forelse ($post->comments->whereNull('comments_id') as $com)
+                            {{-- {{ $comments_id = $com->comments }} --}}
+                            @php
+                                $level = 0
+                            @endphp
+                            @include('post.comments')
+                            <hr style="border: 5px solid black;">
+                        @empty
+                            No existen comentarios para este Post
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+            @if (Auth::check())
+                @php
+                    $comment = new App\Models\Comment();
+                @endphp
+                @include('comment.create')
+            @endif
         </div>
     </section>
 @endsection

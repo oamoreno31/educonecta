@@ -24,11 +24,11 @@ return new class extends Migration
             $table->foreign('users_id', 'fk_comments_users')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
 
             // comments
-            $table->unsignedBigInteger('comments_id');
+            $table->unsignedBigInteger('comments_id')->nullable();
             $table->foreign('comments_id', 'fk_comments_comments')->references('id')->on('comments')->onDelete('restrict')->onUpdate('restrict');
 
             $table->text('content');
-            $table->boolean('state')->default(true);
+            $table->boolean('state')->default(false);
             $table->timestamps();
         });
     }

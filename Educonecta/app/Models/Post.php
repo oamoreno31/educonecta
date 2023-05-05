@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Post extends Model
 {
-    
+
     static $rules = [
 		'title' => 'required',
 		'description' => 'required',
@@ -34,7 +34,7 @@ class Post extends Model
 		'author_id' => 'required',
 		'author_name' => 'required',
     ];
-
+    
     protected $perPage = 20;
 
     /**
@@ -52,7 +52,7 @@ class Post extends Model
     {
         return $this->hasMany('App\Models\Comment', 'posts_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -60,7 +60,7 @@ class Post extends Model
     {
         return $this->hasMany('App\Models\PostsCategory', 'posts_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -68,6 +68,6 @@ class Post extends Model
     {
         return $this->hasMany('App\Models\PostsTag', 'posts_id', 'id');
     }
-    
+
 
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 /**
  * Class Comment
@@ -25,11 +26,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Comment extends Model
 {
-    
+
     static $rules = [
 		'posts_id' => 'required',
 		'users_id' => 'required',
-		'comments_id' => 'required',
 		'content' => 'required',
 		'state' => 'required',
     ];
@@ -51,7 +51,7 @@ class Comment extends Model
     {
         return $this->hasMany('App\Models\Comment', 'comments_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -59,7 +59,7 @@ class Comment extends Model
     {
         return $this->hasOne('App\Models\Comment', 'id', 'comments_id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -67,14 +67,14 @@ class Comment extends Model
     {
         return $this->hasOne('App\Models\Post', 'id', 'posts_id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'id', 'users_id');
+        return $this->belongsTo(User::class, 'users_id');
     }
-    
+
 
 }
