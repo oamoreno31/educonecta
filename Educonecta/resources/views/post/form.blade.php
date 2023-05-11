@@ -6,7 +6,7 @@
 
         <div class="form-group">
             {{ Form::label('title') }}
-            {{ Form::text('title', $post->title, ['class' => 'form-control' . ($errors->has('title') ? ' is-invalid' : ''), 'placeholder' => 'Titel']) }}
+            {{ Form::text('title', $post->title, ['class' => 'form-control' . ($errors->has('title') ? ' is-invalid' : ''), 'placeholder' => 'Title']) }}
             {!! $errors->first('title', '<div class="invalid-feedback">:message</div>') !!}
         </div>
         <div class="form-group">
@@ -34,9 +34,21 @@
             {{ Form::text('author_name', Auth::user()->name, ['class' => 'form-control' . ($errors->has('author_name') ? ' is-invalid' : ''), 'placeholder' => 'Author Name', 'hidden' => 'true']) }}
             {!! $errors->first('author_name', '<div class="invalid-feedback">:message</div>') !!}
         </div>
+        <div class="form-group">
+            <!-- {{ Form::label('author_name') }} -->
+            {{ Form::text('likes', 0, ['class' => 'form-control' . ($errors->has('likes') ? ' is-invalid' : ''), 'placeholder' => 'likes', 'hidden' => 'true']) }}
+            {!! $errors->first('likes', '<div class="invalid-feedback">:message</div>') !!}
+        </div>
+        <div class="form-group">
+            {{ Form::label('category_id') }}
+            {!! Form::select('category_id', $options, $post->category_id, ['class' => 'form-control' . ($errors->has('category_id') ? ' is-invalid' : '')]) !!}
+            {!! $errors->first('category_id', '<div class="invalid-feedback">:message</div>') !!}
+            <!-- <select id="categories-dropdown" class="form-control"></select> -->
+        </div>
 
     </div>
     <div class="box-footer mt20">
         <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

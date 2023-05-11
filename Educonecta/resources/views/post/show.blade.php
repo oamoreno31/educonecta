@@ -60,10 +60,21 @@
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body row">
-                                <div class="col-md-12 d-grid gap-2">
-                                    <button class="btn btn-outline-primary" type="button">Me Gusta</button>
-                                    <button class="btn btn-primary" type="button">Me Gusta</button>
-                                </div>
+                            @if ($post->userLikesPost == false)
+                                <form action="{{ route('posts.like', ['post' => $post->id]) }}" method="POST" class="d-grid gap-2">
+                                    <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+                                    <input type="hidden" name="route" value="posts.show">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">Me Gusta</button>
+                                </form>
+                                @else
+                                <form action="{{ route('posts.dislike', $post->id) }}" method="POST" class="d-grid gap-2">
+                                    <input type="hidden" name="post_id" value="{{$post->id}}">
+                                    <input type="hidden" name="route" value="posts.show">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">No Me gusta</button>
+                                </form>
+                            @endif
                             </div>
                         </div>
                     </div>

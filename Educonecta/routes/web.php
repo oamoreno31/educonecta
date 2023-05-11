@@ -35,3 +35,7 @@ Route::resource('/comments', App\Http\Controllers\CommentController::class);
 Route::resource('/permissions', App\Http\Controllers\PermissionController::class);
 Route::resource('/roles', App\Http\Controllers\RoleController::class);
 Route::resource('/tags', App\Http\Controllers\TagController::class);
+Route::get('api/fetch-categories', [App\Http\Controllers\DropDownController::class, 'fetchCategory']);
+Route::post('/posts/{post}/like', [App\Http\Controllers\PostController::class, 'like'])->name('posts.like');
+Route::post('/posts/{post}/dislike', [App\Http\Controllers\PostController::class, 'dislike'])->name('posts.dislike');
+
