@@ -33,6 +33,7 @@ class Post extends Model
 		'post_date' => 'required',
 		'author_id' => 'required',
 		'author_name' => 'required',
+		'category_id' => 'required',
     ];
     
     protected $perPage = 20;
@@ -42,7 +43,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = ['title','description','content','post_date','author_id','author_name'];
+    protected $fillable = ['title','description','content','post_date','author_id','author_name','category_id'];
 
 
     /**

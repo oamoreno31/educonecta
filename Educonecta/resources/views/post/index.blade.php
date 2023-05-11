@@ -37,10 +37,12 @@
               <p class="d-grid gap-2"><a href="{{ route('posts.create') }}" class="btn btn-success btn-block"  data-placement="left"> Nueva Publicacion </a></p>
               <h4>Categorias</h4>
               <ul class="list-group">
+                @foreach ($categories as $category)
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Category name
-                  <span class="badge bg-primary rounded-pill">14</span>
+                    {{$category->name}}
+                  <span class="badge bg-primary rounded-pill">{{$category->postsCounts}}</span>
                 </li>
+            @endforeach
               </ul>
             </div>
         </div>
@@ -113,7 +115,7 @@
                     <div class="row">
                         <div class="col-lg-7">
                             <h3 class="mt-0">{{$post -> title}}</h3>
-                            <p>Categoria: Matematicas</p>
+                            <p>Categoria: <span class="badge text-bg-success">{{$post->category_name}}</span></p>
                             <p class="card-text">{{$post->description}}</p>
                         </div>
                         <div class="col-lg-3">
@@ -123,8 +125,8 @@
                                 <span class="badge text-bg-success">Success</span>
                             </p>
                             <p class="text-muted">
-                                <span class="badge text-bg-primary">12 Comentarios</span>
-                                <span class="badge text-bg-primary">120 Me Gusta</span>
+                                <span class="badge text-bg-primary">{{$post->comentsCount}} Comentarios</span>
+                                <span class="badge text-bg-primary">{{$post->likesCount}} Me Gusta</span>
                             </p>
                             <p class="text-muted">Autor: {{$post -> author_name}}</p>
                             <?php
@@ -145,8 +147,23 @@
                             @endif
                             <p class="d-grid gap-2">
                                 <a href="{{ route('posts.show',$post->id) }}" class="btn btn-sm btn-primary">Ver mas</a>
-                                <a href="{{ route('posts.show',$post->id) }}" class="btn btn-sm btn-primary">Me Gusta</a>
                             </p>
+                            @if ($post->userLikesPost == false)
+                                <form action="{{ route('posts.like', ['post' => $post->id]) }}" method="POST" class="d-grid gap-2">
+                                    <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+                                    <input type="hidden" name="route" value="posts.index">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">Me Gusta</button>
+                                </form>
+                            @else
+                                <form action="{{ route('posts.dislike', $post->id) }}" method="POST" class="d-grid gap-2">
+                                    <input type="hidden" name="post_id" value="{{$post->id}}">
+                                    <input type="hidden" name="route" value="posts.index">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">No Me gusta</button>
+                                </form>
+                            @endif
+
                         </div>
                     </div>
                         <!-- <hr>

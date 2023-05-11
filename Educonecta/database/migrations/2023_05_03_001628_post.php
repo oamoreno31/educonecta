@@ -24,12 +24,14 @@ return new class extends Migration
 
             // $table->dropColumn('fecha_publicacion');
 
+            $table->string('category_id');            
             $table->string('author_id');            
-            $table->string('author_name');            
+            $table->string('author_name');        
             // $table->foreign('author_id')->references('documentId')->on('users');
-
             // $table->dropForeign(['author_id']);
             // $table->dropColumn('author_id');
+            // $table->unsignedBigInteger('status_id');
+            // $table->foreign('status_id', 'fk_post_status')->references('id')->on('stauts')->onDelete('restrict')->onUpdate('restrict');
 
             $table->timestamps();
         });

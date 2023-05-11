@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use App\Models\Category;
+use App\Models\PostsCategory;
+use App\Models\Comment;
+use App\Models\Like;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class PostController
@@ -20,9 +25,35 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::paginate();
-        $categories = Category::paginate();
+        // foreach ($variable as $key => $value) {
+        //     $comentarios = Comment::where('posts_id', 'like', '{{$post -> id}}')->count();
+        //     $posts -> Comments = $comentarios
+        // }
+        $categories = Category::where('id', '!=', "" )->get();
+        
+        foreach($categories as $key=>$value){
+            $cantidadPosts = Post::where('category_id', 'like', $value -> id )->count();
+            $value["postsCounts"] = $cantidadPosts;
+        }
+        foreach($posts as $key=>$value){
+            $comentarios = Comment::where('posts_id', 'like', $value -> id )->count();
+            $value["comentsCount"] = $comentarios;
+            $likesCount = Like::where('post_id', 'like', $value->id )->count();
+            $value["likesCount"] = $likesCount;
+            $category = Category::where('id', 'like', $value->category_id )->get();
+            $value["category_name"] = $category[0]->name;
+            
+            $userLikesPost = Like::where('post_id', 'like', $value->id )->where('user_id', Auth::id())->count();
+            $cero = 0;
+            if($userLikesPost > $cero){
+                $value["userLikesPost"] = true;
+            }else{
+                $value["userLikesPost"] = false;
+            }
+        }
+        
 
-        return view('post.index', compact('posts'))
+        return view('post.index', compact('posts', "categories"))
             ->with('i', (request()->input('page', 1) - 1) * $posts->perPage());
     }
 
@@ -34,7 +65,16 @@ class PostController extends Controller
     public function create()
     {
         $post = new Post();
-        return view('post.create', compact('post'));
+        
+        $categories = json_decode(Http::accept('application/json')->get(url('api/fetch-categories')), true);
+        $nuevaCategoria = array(
+            'name' => '-- Seleccione una opción --',
+            'id' => ''
+        );
+        array_push($categories['categories'], $nuevaCategoria);
+        $options = array_column($categories['categories'], 'name', 'id');
+
+        return view('post.create', compact('post',"options"));
     }
 
     /**
@@ -76,7 +116,14 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        return view('post.edit', compact('post'));
+        $categories = json_decode(Http::accept('application/json')->get(url('api/fetch-categories')), true);
+        $nuevaCategoria = array(
+            'name' => '-- Seleccione una opción --',
+            'id' => ''
+        );
+        array_push($categories['categories'], $nuevaCategoria);
+        $options = array_column($categories['categories'], 'name', 'id');
+        return view('post.edit', compact('post','options'));
     }
 
     /**
@@ -95,6 +142,29 @@ class PostController extends Controller
         return redirect()->route('posts.index')
             ->with('success', 'Post updated successfully');
     }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  Post $post
+     * @return \Illuminate\Http\Response
+     */
+    public function like(Request $request, Post $post)
+    {
+        $likes = Like::create([
+            "post_id" => $post->id,
+            "user_id" => $request->user_id,
+        ]);
+                
+        return redirect()->route('posts.index');
+    }
+    public function dislike(Request $request, Post $post)
+    {
+        $data_like = Like::where('post_id', 'like', $request->post_id)->where('user_id', 'like', Auth::id())->get();
+        $like = Like::find($data_like[0]->id)->delete();
+                
+        return redirect()->route('posts.index');
+    }
 
     /**
      * @param int $id
@@ -108,4 +178,5 @@ class PostController extends Controller
         return redirect()->route('posts.index')
             ->with('success', 'Post deleted successfully');
     }
+
 }
