@@ -13,6 +13,7 @@ return new class extends Migration
     {
         //
         Schema::create('posts_tags', function (Blueprint $table) {
+            $table->bigIncrements('id');
             // posts
             $table->unsignedBigInteger('posts_id');
             $table->foreign('posts_id', 'fk_poststags_posts')->references('id')->on('posts')->onDelete('restrict')->onUpdate('restrict');
@@ -20,6 +21,8 @@ return new class extends Migration
             // tags
             $table->unsignedBigInteger('tags_id');
             $table->foreign('tags_id', 'fk_poststags_tags')->references('id')->on('tags')->onDelete('restrict')->onUpdate('restrict');
+            
+            $table->timestamps();
         });
     }
 

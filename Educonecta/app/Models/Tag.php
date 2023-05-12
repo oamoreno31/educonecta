@@ -22,7 +22,6 @@ class Tag extends Model
     
     static $rules = [
 		'name' => 'required',
-		'slug' => 'required',
     ];
 
     protected $perPage = 20;

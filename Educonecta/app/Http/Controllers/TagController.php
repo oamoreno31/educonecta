@@ -43,9 +43,18 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
+        function createSlug($txt){
+            $accents = ["á","é","í","ó","ú","Á","É","Í","Ó","Ú"," "];
+            $REPLACEaccents = ["a","e","i","o","u","a","e","i","o","u","_"];
+    
+            return strtolower(str_replace($accents, $REPLACEaccents, $txt));
+        }
         request()->validate(Tag::$rules);
 
-        $tag = Tag::create($request->all());
+        $tag = Tag::create([
+            "name" => $request->name,
+            "slug" => createSlug($request->name),
+        ]);
 
         return redirect()->route('tags.index')
             ->with('success', 'Tag created successfully.');
@@ -86,9 +95,18 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
+        function createSlug($txt){
+            $accents = ["á","é","í","ó","ú","Á","É","Í","Ó","Ú"," "];
+            $REPLACEaccents = ["a","e","i","o","u","a","e","i","o","u","_"];
+    
+            return strtolower(str_replace($accents, $REPLACEaccents, $txt));
+        }
         request()->validate(Tag::$rules);
 
-        $tag->update($request->all());
+        $tag->update([
+            "name" => $request->name,
+            "slug" => createSlug($request->name),
+        ]);
 
         return redirect()->route('tags.index')
             ->with('success', 'Tag updated successfully');

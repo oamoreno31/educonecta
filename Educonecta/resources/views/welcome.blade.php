@@ -23,7 +23,8 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="./assets/css/soft-design-system.css?v=1.0.9" rel="stylesheet" />
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
 
 </head>
 
@@ -32,7 +33,7 @@
     <main class="py-4">@yield('content')</main>
     @extends('layouts.template')
     @section('page_title','Educonecta')
-
+    
     <!--   Core JS Files   -->
     <script src="./assets/js/core/popper.min.js" type="text/javascript"></script>
     <script src="./assets/js/core/bootstrap.min.js" type="text/javascript"></script>

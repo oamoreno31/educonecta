@@ -35,6 +35,7 @@ class CategoryController extends Controller
         return view('category.create', compact('category'));
     }
 
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -43,10 +44,17 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        function createSlug($txt){
+            $accents = ["á","é","í","ó","ú","Á","É","Í","Ó","Ú"," "];
+            $REPLACEaccents = ["a","e","i","o","u","a","e","i","o","u","_"];
+    
+            return strtolower(str_replace($accents, $REPLACEaccents, $txt));
+        }
         request()->validate(Category::$rules);
-
-        $category = Category::create($request->all());
-
+        $category = Category::create([
+            "name" => $request->name,
+            "slug" => createSlug($request->name),
+        ]);
         return redirect()->route('categories.index')
             ->with('success', 'Category created successfully.');
     }
@@ -86,10 +94,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        function createSlug($txt){
+            $accents = ["á","é","í","ó","ú","Á","É","Í","Ó","Ú"," "];
+            $REPLACEaccents = ["a","e","i","o","u","a","e","i","o","u","_"];
+    
+            return strtolower(str_replace($accents, $REPLACEaccents, $txt));
+        }
         request()->validate(Category::$rules);
 
-        $category->update($request->all());
-
+        $category->update([
+            "name" => $request->name,
+            "slug" => createSlug($request->name),
+        ]);
         return redirect()->route('categories.index')
             ->with('success', 'Category updated successfully');
     }

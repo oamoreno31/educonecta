@@ -31,19 +31,25 @@
                     <div class="card-header">
                         <div class="float-right">
                             <div class="row">
-                                <div class="col-lg-10">
+                                <div class="col-lg-12">
                                     <a class="btn btn-primary" href="{{ route('posts.index') }}">Regresar</a>
                                     <h3>{{ $post->title }}</h3>
-                                    <strong>Descripción:</strong> {{ $post->description }}
                                 </div>
-                                <div class="col-lg-2">
-                                    <strong>Categoria:</strong> Categoria<br />
-                                    <strong>Tags:</strong>
-                                    <span class="badge text-bg-success">Success</span>
-                                    <span class="badge text-bg-success">Success</span>
-                                    <span class="badge text-bg-success">Success</span><br />
+                                <div class="col-lg-6">
+                                    <strong>Descripción:</strong> {{ $post->description }}<br />
+                                    <strong>Categoria:</strong> {{$post->category_name}}<br />
+                                </div>
+                                <div class="col-lg-6">
                                     <strong>Autor:</strong> {{ $post->author_name }}<br />
                                     <strong>Fecha:</strong> {{ date('d/m/Y', strtotime($post->post_date)) }}
+                                </div>
+                                <div class="col-lg-6">
+                                    <strong>Tags:</strong>
+                                        @foreach ($post->tags_names as $key=>$tags)
+                                            @if(3 > $key)
+                                            <span style="text-decoration: underline; color: darkblue;" > # {{$tags["name"]}}</span> 
+                                            @endif
+                                        @endforeach
                                 </div>
                             </div>
                         </div>
@@ -75,6 +81,8 @@
                                     <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">No Me gusta</button>
                                 </form>
                             @endif
+                            <p class="d-grid gap-2"><a href="{{ route('posts.pdf', ['post' => $post->id]) }}" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-eye" style='font-size:15px;'></i> Ver PDF</a></p>
+                            <p class="d-grid gap-2"><a href="{{ route('posts.download', ['post' => $post->id]) }}" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-arrow-down" style='font-size:15px;'></i>Descargar</a></p>
                             </div>
                         </div>
                     </div>
