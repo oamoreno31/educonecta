@@ -38,10 +38,11 @@
               <h4>Categorias</h4>
               <ul class="list-group">
                 @foreach ($categories as $category)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{$category->name}}
-                  <span class="badge bg-primary rounded-pill">{{$category->postsCounts}}</span>
-                </li>
+                @if($category->postsCounts > 0)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{$category->name}}<span class="badge bg-primary rounded-pill">{{$category->postsCounts}}</span>
+                    </li>
+                @endif
             @endforeach
               </ul>
             </div>
@@ -119,30 +120,27 @@
                             <p class="card-text">{{$post->description}}</p>
                         </div>
                         <div class="col-lg-3">
-                            <p class="text-muted">Tags<br/>
-                                <span class="badge text-bg-success">Success</span>
-                                <span class="badge text-bg-success">Success</span>
-                                <span class="badge text-bg-success">Success</span>
-                            </p>
-                            <p class="text-muted">
-                                <span class="badge text-bg-primary">{{$post->comentsCount}} Comentarios</span>
-                                <span class="badge text-bg-primary">{{$post->likesCount}} Me Gusta</span>
-                            </p>
                             <p class="text-muted">Autor: {{$post -> author_name}}</p>
                             <?php
                                 $res_tiempo = tiempo_publicacion($post -> created_at)
                             ?>
                             <p class="text-muted">Fecha: {{$res_tiempo}}</p>
+                            <p class="text-muted">
+                                <span class="badge text-bg-primary">{{$post->comentsCount}} Comentarios</span>
+                                <span class="badge text-bg-primary">{{$post->likesCount}} Me Gusta</span><br/><br/>
+                                <a href="{{ route('posts.pdf',$post->id) }}" target="_blank" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-eye" style='font-size:20px;'></i> Ver PDF</a>
+                                <a href="{{ route('posts.download',$post->id) }}" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-download" style='font-size:17px'></i> Descargar</a>
+                            </p>
                         </div>
                         
                         <div class="col-lg-2">
                             <p class="text-muted">Acciones</p>
                             @if (Auth::user()->id == $post->author_id and Auth::user()->role == 'teacher')
                             <form action="{{ route('posts.destroy',$post->id) }}" method="POST">
-                            <a href="{{ route('posts.edit',$post->id) }}" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-edit" style='font-size:20px;'></i> Editar</a>
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"  class="btn btn-sm" style="color: red;"><i class="fa fa-fw fa-trash" style='font-size:17px'></i> Eliminar</button>
+                                <a href="{{ route('posts.edit',$post->id) }}" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-edit" style='font-size:20px;'></i> Editar</a>
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"  class="btn btn-sm" style="color: red;"><i class="fa fa-fw fa-trash" style='font-size:17px'></i> Eliminar</button>
                             </form>
                             @endif
                             <p class="d-grid gap-2">
@@ -163,7 +161,18 @@
                                     <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">No Me gusta</button>
                                 </form>
                             @endif
-
+                        </div>
+                        <div class="col-lg-12">
+                            <p class="text-muted">Tags<br/>
+                                @foreach ($post->tags_names as $key=>$tags)
+                                    @if(3 > $key)
+                                    <span style="text-decoration: underline; color: darkblue;" > # {{$tags["name"]}}</span> 
+                                    @endif
+                                    @if($key > 2)
+                                         (mas tags)
+                                    @endif
+                                @endforeach
+                                </p>
                         </div>
                     </div>
                         <!-- <hr>

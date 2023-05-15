@@ -38,4 +38,6 @@ Route::resource('/tags', App\Http\Controllers\TagController::class);
 Route::get('api/fetch-categories', [App\Http\Controllers\DropDownController::class, 'fetchCategory']);
 Route::post('/posts/{post}/like', [App\Http\Controllers\PostController::class, 'like'])->name('posts.like');
 Route::post('/posts/{post}/dislike', [App\Http\Controllers\PostController::class, 'dislike'])->name('posts.dislike');
+Route::get('/posts/{post}/pdf', [App\Http\Controllers\PostController::class, 'pdf'])->name('posts.pdf');
+Route::get('/posts/{post}/download', [App\Http\Controllers\PostController::class, 'download'])->name('posts.download');
 
