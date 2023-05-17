@@ -85,13 +85,24 @@ class PostController extends Controller
     {
         $post = new Post();
         
-        $categories = json_decode(Http::accept('application/json')->get(url('api/fetch-categories')), true);
+        // $categories = json_decode($category = Category::where('id', '!=', "")->get());
+        $categories = Category::where('id', '!=', "" )->get();
+        $ArrayCategories = [];
         $nuevaCategoria = array(
             'name' => '-- Seleccione una opción --',
             'id' => ''
         );
-        array_push($categories['categories'], $nuevaCategoria);
-        $options = array_column($categories['categories'], 'name', 'id');
+        array_push($ArrayCategories, $nuevaCategoria);
+        
+        foreach($categories as $key=>$value){
+            // $cantidadPosts = Post::where('category_id', 'like', $value -> id )->count();
+            $nuevaCategoria = array(
+                'name' => $value -> name,
+                'id' => $value -> id
+            );
+            array_push($ArrayCategories, $nuevaCategoria);
+        }
+        $options = array_column($ArrayCategories, 'name', 'id');
 
         $tags_data["tags"] = json_decode(Tag::get(["name", "id"]));
         $tags_data = array_column($tags_data["tags"], 'name', 'id');
