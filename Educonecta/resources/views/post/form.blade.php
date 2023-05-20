@@ -40,11 +40,38 @@ tinymce.init({ selector: '#content' }); $('Tags').selectpicker();</script>
             </div>
         </div>
         
-        <div class="form-group">
-            <!-- {{ Form::label('content') }} -->
-            <label for="">Contenido</label>
-            {{ Form::textarea('content', $post->content, ['class' => 'form-control' . ($errors->has('content') ? ' is-invalid' : ''), 'placeholder' => 'Content']) }}
-            {!! $errors->first('content', '<div class="invalid-feedback">:message</div>') !!}
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <!-- {{ Form::label('content') }} -->
+                    <label for="">Contenido</label>
+                    {{ Form::textarea('content', $post->content, ['class' => 'form-control' . ($errors->has('content') ? ' is-invalid' : ''), 'placeholder' => 'Content']) }}
+                    {!! $errors->first('content', '<div class="invalid-feedback">:message</div>') !!}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card" style="margin-top: 15px;">
+                    <div class="card-header">
+                        <strong>Cargar documentos</strong>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-10"><input type="file" name="files" id="files" class="form-control"></div>
+                                <div class="col-lg-2"><button class="btn btn-primary">Agregar</button></div>
+                            </div>
+                        </div>
+                        <hr style="border-bottom: 1px solid gray;"/>
+                        <div class="form-group">
+                            <div class="row" style="border: 1px solid rgba(128, 128, 128, 0.575); border-radius: 5px; padding-top: 10px; margin-bottom: -10px;">
+                                <div class="col-lg-2" style="border-right: 1px solid gray;"><button class="btn btn-danger">Elimnar</button></div>
+                                <div class="col-lg-10"><p>Nombre</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <!-- {{ Form::label('post_date') }} -->
@@ -66,8 +93,8 @@ tinymce.init({ selector: '#content' }); $('Tags').selectpicker();</script>
             {{ Form::text('likes', 0, ['class' => 'form-control' . ($errors->has('likes') ? ' is-invalid' : ''), 'placeholder' => 'likes', 'hidden' => 'true']) }}
             {!! $errors->first('likes', '<div class="invalid-feedback">:message</div>') !!}
         </div>
-
     </div>
+    <br/>
     <div class="box-footer mt20">
         <button type="submit" class="btn btn-primary">{{ __('Publicar') }}</button>
     </div>
