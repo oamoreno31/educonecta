@@ -13,7 +13,10 @@ use App\Models\PostsCategory;
 use App\Models\Comment;
 use App\Models\Like;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\FirebaseDBController;
+use App\Models\PostFile;
 use PDF;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class PostController
@@ -120,6 +123,8 @@ class PostController extends Controller
     {
         request()->validate(Post::$rules);
 
+        
+        
         $post = Post::create($request->all());
         
         $Tags = $request->Tags;
@@ -129,6 +134,21 @@ class PostController extends Controller
         
         $post_id = $post->id;
         
+        $files_count = $request->files_count;
+        echo($files_count);
+        foreach (range(1, $files_count) as $number) {
+            echo $number;
+            $image = $request->file('file_'.$number);
+            $imageReference = FirebaseDBController::uploadFile($image, $post_id);
+            $postFile = PostFile::create([
+                "post_id" => $post_id,
+                "file_name" => $image->getClientOriginalName(),
+                "file_url_fb" => $imageReference,
+            ]);
+        }
+
+
+
 
         foreach ($Tags as $key=>$value) {
             $nuevoValor = array(
@@ -141,6 +161,7 @@ class PostController extends Controller
             ]);
             array_push($arrayTags, $nuevoValor);
         }
+
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully.');
@@ -157,8 +178,18 @@ class PostController extends Controller
         $post = Post::find($id);
 
         $postTags = PostsTag::where('posts_id', 'like', $id)->get();
+
+        $postFiles = PostFile::where('post_id', 'like', $id)->get();
             
         $tags = [];
+        $files_ = [];
+        foreach ($postFiles as $key_tpostFiles=>$value_postFile) {
+            $nuevoValor = array(
+                'name' => $value_postFile->file_name,
+                'url' => $value_postFile->file_url_fb,
+            );
+            array_push($files_, $nuevoValor);
+        }
         foreach ($postTags as $key_tagPost=>$value_tagPost) {
             $tagRecord = Tag::where('id', 'like', $value_tagPost->tags_id)->get();
             $tagRecord_len = Tag::where('id', 'like', $value_tagPost->tags_id)->count();
@@ -172,6 +203,7 @@ class PostController extends Controller
             }
         }
         $post["tags_names"] = $tags;
+        $post["files"] = $files_;
 
         $category = Category::where('id', 'like', $post->category_id )->get();
         $post["category_name"] = $category[0]->name;

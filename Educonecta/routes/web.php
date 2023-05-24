@@ -54,3 +54,4 @@ Route::get('/firebase/get_data', [App\Http\Controllers\FirebaseDBController::cla
 Route::get('/firebase/update', [App\Http\Controllers\FirebaseDBController::class, 'update']);
 Route::get('/firebase/delete', [App\Http\Controllers\FirebaseDBController::class, 'delete']);
 Route::get('/firebase/delete_all', [App\Http\Controllers\FirebaseDBController::class, 'deleteAll']);
+Route::get('/firebase/upload_file', [App\Http\Controllers\FirebaseDBController::class, 'uploadFile']);

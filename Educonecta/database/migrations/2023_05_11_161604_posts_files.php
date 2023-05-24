@@ -16,9 +16,9 @@ return new class extends Migration
             
             $table->unsignedBigInteger('post_id');
             $table->string('file_name');
-            $table->string('file_size');
-            $table->string('file_blob');
-            $table->string('file_url_fb');
+            // $table->string('file_size');
+            // $table->string('file_blob');
+            $table->longText('file_url_fb');
             $table->foreign('post_id', 'fk_post_file')->references('id')->on('posts')->onDelete('restrict')->onUpdate('restrict');
 
             $table->timestamps();

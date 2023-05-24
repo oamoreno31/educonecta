@@ -53,20 +53,14 @@ tinymce.init({ selector: '#content' }); $('Tags').selectpicker();</script>
             <div class="col-lg-6">
                 <div class="card" style="margin-top: 15px;">
                     <div class="card-header">
-                        <strong>Cargar documentos</strong>
+                        <strong>Cargar archivos</strong>
                     </div>
+                    <input type="hidden" name="files_count" id="files_count">
                     <div class="card-body">
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-lg-10"><input type="file" name="files" id="files" class="form-control"></div>
-                                <div class="col-lg-2"><button class="btn btn-primary">Agregar</button></div>
-                            </div>
-                        </div>
-                        <hr style="border-bottom: 1px solid gray;"/>
-                        <div class="form-group">
-                            <div class="row" style="border: 1px solid rgba(128, 128, 128, 0.575); border-radius: 5px; padding-top: 10px; margin-bottom: -10px;">
-                                <div class="col-lg-2" style="border-right: 1px solid gray;"><button class="btn btn-danger">Elimnar</button></div>
-                                <div class="col-lg-10"><p>Nombre</p></div>
+                                <div class="col-lg-12"><button type="button" class="btn btn-primary" id="btnNewFile" onclick="btnAddOnCLick()">Nuevo Archivo</button></div>
+                                <div class="col-lg-12" id="filesContainer"></div>
                             </div>
                         </div>
                     </div>
@@ -100,3 +94,4 @@ tinymce.init({ selector: '#content' }); $('Tags').selectpicker();</script>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ asset('assets/js/educonecta_custom_lib.js') }}"></script>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Kreait\Firebase\Contract\Storage;
+use Kreait\Firebase\Factory;
 
 class FirebaseDBController extends Controller
 {
@@ -10,6 +12,8 @@ class FirebaseDBController extends Controller
 
     public function __construct() {
         $this->database = app('firebase.database');
+
+        $this->storage = app('firebase.storage');
     }
 
     /**
@@ -39,7 +43,7 @@ class FirebaseDBController extends Controller
      * Update data.
      */
     public function update() {
-        $post_id = "-M56ibO-en8Z9O5ryzjK";
+        $post_id = "-NWAe4ZWtAxFgXAFaOPM";
 
         // new values
         $postData = [
@@ -60,7 +64,7 @@ class FirebaseDBController extends Controller
      * Delete data.
      */
     public function delete() {
-        $post_id = "-M56jWfY-f7mHJYc5MtL";
+        $post_id = "-NWAe4ZWtAxFgXAFaOPM";
 
         $delete = $this->database->getReference('blog/posts/'.$post_id)->remove();
     }
@@ -70,5 +74,34 @@ class FirebaseDBController extends Controller
      */
     public function deleteAll() {
         $delete = $this->database->getReference('blog/posts')->remove();
+    }
+
+    /**
+     * Upload File
+     */
+    public static function uploadFile($image, $postId){
+          $firebase_storage_path = 'PostsFiles/'.$postId."/";
+          $localfolder = public_path('firebase-temp-uploads') .'/';
+          $name = $image->getClientOriginalName();
+          $extension = $image->getClientOriginalExtension();
+          $file = $name. '.' . $extension;
+          $fileName = $name. '.' . $extension;
+          if ($image->move($localfolder, $file)) {
+            $uploadedfile = fopen($localfolder.$file, 'r');
+            app('firebase.storage')->getBucket()->upload($uploadedfile, ['name' => $firebase_storage_path . $file]);
+            //will remove from local laravel folder
+            unlink($localfolder . $file);
+            // Session::flash('message', 'Succesfully Uploaded');
+            $imageReference = app('firebase.storage')->getBucket()->object("PostsFiles/".$postId."/".$fileName);
+
+            if ($imageReference->exists()) {
+                $expiresAt = new \DateTime('tomorrow');
+                $imageRef = $imageReference->signedUrl($expiresAt);
+              } else {
+                $imageRef = "none";
+              }
+          }
+          return $imageRef;
+
     }
 }
