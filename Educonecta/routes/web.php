@@ -41,3 +41,16 @@ Route::post('/posts/{post}/dislike', [App\Http\Controllers\PostController::class
 Route::get('/posts/{post}/pdf', [App\Http\Controllers\PostController::class, 'pdf'])->name('posts.pdf');
 Route::get('/posts/{post}/download', [App\Http\Controllers\PostController::class, 'download'])->name('posts.download');
 
+// Route::prefix('firebase')->group(function () {
+//     Route::get('insert', '@insert');
+//     Route::get('get_data', 'FirebaseDBController@getData');
+//     Route::get('update', 'FirebaseDBController@update');
+//     Route::get('delete', 'FirebaseDBController@delete');
+//     Route::get('delete_all', 'FirebaseDBController@deleteAll');
+// });
+
+Route::get('/firebase/insert', [App\Http\Controllers\FirebaseDBController::class, 'insert']);
+Route::get('/firebase/get_data', [App\Http\Controllers\FirebaseDBController::class, 'getData']);
+Route::get('/firebase/update', [App\Http\Controllers\FirebaseDBController::class, 'update']);
+Route::get('/firebase/delete', [App\Http\Controllers\FirebaseDBController::class, 'delete']);
+Route::get('/firebase/delete_all', [App\Http\Controllers\FirebaseDBController::class, 'deleteAll']);
