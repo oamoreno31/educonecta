@@ -6,6 +6,11 @@
 
 @section('content')
     <section class="content container-fluid">
+        @if ($message = Session::get('error'))
+            <div class="alert alert-danger">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
 

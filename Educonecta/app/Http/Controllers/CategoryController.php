@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\DAO\CategoryDao;
 
 /**
  * Class CategoryController
@@ -35,7 +36,7 @@ class CategoryController extends Controller
         return view('category.create', compact('category'));
     }
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -44,19 +45,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        function createSlug($txt){
-            $accents = ["á","é","í","ó","ú","Á","É","Í","Ó","Ú"," "];
-            $REPLACEaccents = ["a","e","i","o","u","a","e","i","o","u","_"];
-    
-            return strtolower(str_replace($accents, $REPLACEaccents, $txt));
-        }
         request()->validate(Category::$rules);
-        $category = Category::create([
-            "name" => $request->name,
-            "slug" => createSlug($request->name),
-        ]);
-        return redirect()->route('categories.index')
-            ->with('success', 'Category created successfully.');
+
+        $category = CategoryDao::NewCategory($request);
+        if ($category->success == true) {
+            return redirect()->route('categories.index')
+                ->with('success', 'Category created successfully.');
+        } else {
+            return redirect()->route('categories.create', compact('request'))
+                ->with('error', $category->message);
+        }
     }
 
     /**
@@ -67,9 +65,16 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::find($id);
+        // $category = Category::find($id);
+        $category = CategoryDao::SearchById($id);
 
-        return view('category.show', compact('category'));
+        if ($category->success == true) {
+            return view('category.show', compact('category'));
+        } else {
+            // return view('category.show', compact('category'));
+            return redirect()->route('category.show')
+                ->with('error', $category->message);
+        }
     }
 
     /**
@@ -80,9 +85,15 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id);
-
-        return view('category.edit', compact('category'));
+        // $category = Category::find($id);
+        $category = CategoryDao::SearchById($id);
+        if ($category->success == true) {
+            $category = $category->detail;
+            return view('category.edit', compact('category'));
+        } else {
+            return redirect()->route('categories.index')
+                ->with('error', $category->message);
+        }
     }
 
     /**
@@ -94,20 +105,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        function createSlug($txt){
-            $accents = ["á","é","í","ó","ú","Á","É","Í","Ó","Ú"," "];
-            $REPLACEaccents = ["a","e","i","o","u","a","e","i","o","u","_"];
-    
-            return strtolower(str_replace($accents, $REPLACEaccents, $txt));
-        }
         request()->validate(Category::$rules);
-
-        $category->update([
-            "name" => $request->name,
-            "slug" => createSlug($request->name),
-        ]);
-        return redirect()->route('categories.index')
-            ->with('success', 'Category updated successfully');
+        $_category = CategoryDao::updateCategory($request, $category);
+        if ($_category->success == true) {
+            return redirect()->route('categories.index')
+                ->with('success', 'Category updated successfully');
+        } else {
+            return redirect()->route('categories.edit', compact("category"))
+                ->with('error', $_category->message);
+        }
     }
 
     /**
@@ -117,9 +123,14 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id)->delete();
-
-        return redirect()->route('categories.index')
-            ->with('success', 'Category deleted successfully');
+        // $category = Category::find($id)->delete();
+        $category = CategoryDao::DeleteCategory($id);
+        if ($category->success == true) {
+            return redirect()->route('categories.index')
+                ->with('success', 'Category deleted successfully');
+        } else {
+            return redirect()->route('categories.index')
+                ->with('error', $category->message);
+        }
     }
 }
