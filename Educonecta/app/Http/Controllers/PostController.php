@@ -21,7 +21,8 @@ use App\Http\DAO\PostTagsDao;
 use App\Http\DAO\CommentDao;
 use App\Http\DAO\LikeDao;
 use App\Models\PostFile;
-use PDF;
+// use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 
 /**
