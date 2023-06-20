@@ -18,6 +18,8 @@ use App\Http\DAO\CategoryDao;
 use App\Http\DAO\PostDao;
 use App\Http\DAO\TagsDao;
 use App\Http\DAO\PostTagsDao;
+use App\Http\DAO\CommentDao;
+use App\Http\DAO\LikeDao;
 use App\Models\PostFile;
 use PDF;
 use Illuminate\Support\Facades\Storage;
@@ -36,29 +38,29 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::paginate();
-        // foreach ($variable as $key => $value) {
-        //     $comentarios = Comment::where('posts_id', 'like', '{{$post -> id}}')->count();
-        //     $posts -> Comments = $comentarios
-        // }
-        $categories = Category::where('id', '!=', "")->get();
+        
+        $categories = CategoryDao::getAllCategories();
 
         foreach ($categories as $key => $value) {
-            $cantidadPosts = Post::where('category_id', 'like', $value->id)->count();
+            $cantidadPosts = PostDao::SearchByCategory($value->id)->detail->count();
             $value["postsCounts"] = $cantidadPosts;
         }
         foreach ($posts as $key => $value) {
-            $comentarios = Comment::where('posts_id', 'like', $value->id)->count();
+
+            $comentarios = CommentDao::countCommentByPost($value->id)->detail;
             $value["comentsCount"] = $comentarios;
-            $likesCount = Like::where('post_id', 'like', $value->id)->count();
+
+            $likesCount = LikeDao::countLikesByPost($value->id)->detail;
             $value["likesCount"] = $likesCount;
-            $category = Category::where('id', 'like', $value->category_id)->get();
+            $category = CategoryDao::SearchById($value->category_id)->detail->get();
+
             $value["category_name"] = $category[0]->name;
-            $postTags = PostsTag::where('posts_id', 'like', $value->id)->get();
+            $postTags = PostTagsDao::SearchByPost($value->id);
 
             $tags = [];
             foreach ($postTags as $key_tagPost => $value_tagPost) {
-                $tagRecord = Tag::where('id', 'like', $value_tagPost->tags_id)->get();
-                $tagRecord_len = Tag::where('id', 'like', $value_tagPost->tags_id)->count();
+                $tagRecord = TagsDao::getCategoryById($value_tagPost->tags_id)->detail;
+                $tagRecord_len = TagsDao::countCategories($value_tagPost->tags_id)->detail;
                 if ($tagRecord_len > 0) {
                     foreach ($tagRecord as $key_tag => $value_tag) {
                         $nuevoValor = array(
@@ -69,14 +71,7 @@ class PostController extends Controller
                 }
             }
             $value["tags_names"] = $tags;
-
-            $userLikesPost = Like::where('post_id', 'like', $value->id)->where('user_id', Auth::id())->count();
-            $cero = 0;
-            if ($userLikesPost > $cero) {
-                $value["userLikesPost"] = true;
-            } else {
-                $value["userLikesPost"] = false;
-            }
+            $value["userLikesPost"] = LikeDao::userLikesPost($value->id, Auth::id());
         }
 
         return view('post.index', compact('posts', "categories"))
@@ -93,13 +88,15 @@ class PostController extends Controller
         $post = new Post();
 
         // $categories = json_decode($category = Category::where('id', '!=', "")->get());
-        $categories = Category::where('id', '!=', "")->get();
+        // $categories = Category::where('id', '!=', "")->get();
+        $categories = CategoryDao::getAllCategories()->detail;
         $ArrayCategories = [];
-        $nuevaCategoria = array(
-            'name' => '-- Seleccione una opción --',
-            'id' => ''
-        );
-        array_push($ArrayCategories, $nuevaCategoria);
+        $ArrayCategories = CategoryDao::getSelectCategories()->detail;
+        // $nuevaCategoria = array(
+        //     'name' => '-- Seleccione una opción --',
+        //     'id' => ''
+        // );
+        // array_push($ArrayCategories, $nuevaCategoria);
 
         foreach ($categories as $key => $value) {
             // $cantidadPosts = Post::where('category_id', 'like', $value -> id )->count();
@@ -138,18 +135,18 @@ class PostController extends Controller
 
         $post_id = $post->id;
 
-        $files_count = $request->files_count;
-        echo ($files_count);
-        foreach (range(1, $files_count) as $number) {
-            echo $number;
-            $image = $request->file('file_' . $number);
-            $imageReference = FirebaseDBController::uploadFile($image, $post_id);
-            $postFile = PostFile::create([
-                "post_id" => $post_id,
-                "file_name" => $image->getClientOriginalName(),
-                "file_url_fb" => $imageReference,
-            ]);
-        }
+        // $files_count = $request->files_count;
+        // echo ($files_count);
+        // foreach (range(1, $files_count) as $number) {
+        //     echo $number;
+        //     $image = $request->file('file_' . $number);
+        //     $imageReference = FirebaseDBController::uploadFile($image, $post_id);
+        //     $postFile = PostFile::create([
+        //         "post_id" => $post_id,
+        //         "file_name" => $image->getClientOriginalName(),
+        //         "file_url_fb" => $imageReference,
+        //     ]);
+        // }
 
 
 
@@ -159,10 +156,7 @@ class PostController extends Controller
                 'category_id' => $value,
                 'post_id' => $post_id
             );
-            $tags = PostsTag::create([
-                "posts_id" => $post_id,
-                "tags_id" => $value,
-            ]);
+            $tags = PostTagsDao::newRecord($post_id, $value);
             array_push($arrayTags, $nuevoValor);
         }
 
@@ -181,7 +175,8 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        $postTags = PostsTag::where('posts_id', 'like', $id)->get();
+        // $postTags = PostsTags::where('posts_id', 'like', $id)->get();
+        $postTags = PostTagsDao::SearchByPost($id)->detail;
 
         $postFiles = PostFile::where('post_id', 'like', $id)->get();
 
@@ -195,8 +190,8 @@ class PostController extends Controller
             array_push($files_, $nuevoValor);
         }
         foreach ($postTags as $key_tagPost => $value_tagPost) {
-            $tagRecord = Tag::where('id', 'like', $value_tagPost->tags_id)->get();
-            $tagRecord_len = Tag::where('id', 'like', $value_tagPost->tags_id)->count();
+            $tagRecord = TagsDao::getCategoryById($value_tagPost->tags_id)->detail;
+            $tagRecord_len = TagsDao::countCategories($value_tagPost->tags_id)->detail;
             if ($tagRecord_len > 0) {
                 foreach ($tagRecord as $key_tag => $value_tag) {
                     $nuevoValor = array(
@@ -209,7 +204,8 @@ class PostController extends Controller
         $post["tags_names"] = $tags;
         $post["files"] = $files_;
 
-        $category = Category::where('id', 'like', $post->category_id)->get();
+        // $category = Category::where('id', 'like', $post->category_id)->get();
+        $category = CategoryDao::SearchById($post->category_id);
         $post["category_name"] = $category[0]->name;
 
         return view('post.show', compact('post'));
@@ -230,7 +226,7 @@ class PostController extends Controller
             return redirect()->route('categories.index')->with('error', $post->message);
         }
 
-        $fetchCategories = CategoryDao::getAllCategories();
+        $fetchCategories = CategoryDao::getSelectCategories();
         if ($fetchCategories->success == true) {
             $options = $fetchCategories->detail;
         } else {
@@ -281,11 +277,13 @@ class PostController extends Controller
 
         $post_id = $post->id;
 
-        $postTags = PostsTag::where('posts_id', 'like', $post_id)->get();
+        // $postTags = PostsTag::where('posts_id', 'like', $post_id)->get();
+        $postTags = PostTagsDao::SearchByPost($post_id)->detail;
 
         $selectedTags = [];
         foreach ($postTags as $key => $value) {
-            $postTagDeleted = PostsTag::find($value->id)->delete();
+            // $postTagDeleted = PostsTag::find($value->id)->delete();
+            $postTagDeleted = PostTagsDao::deleteRecord($value->id);
         }
 
         foreach ($Tags as $key => $value) {
@@ -293,10 +291,7 @@ class PostController extends Controller
                 'category_id' => $value,
                 'post_id' => $post_id
             );
-            $tags = PostsTag::create([
-                "posts_id" => $post_id,
-                "tags_id" => $value,
-            ]);
+            $tags = PostTagsDao::newRecord($post_id, $value);
             array_push($arrayTags, $nuevoValor);
         }
         return redirect()->route('posts.index')
@@ -311,17 +306,18 @@ class PostController extends Controller
      */
     public function like(Request $request, Post $post)
     {
-        $likes = Like::create([
-            "post_id" => $post->id,
-            "user_id" => $request->user_id,
-        ]);
-
+        // $likes = Like::create([
+        //     "post_id" => $post->id,
+        //     "user_id" => $request->user_id,
+        // ]);
+        $likes = LikeDao::newLike($post->id, $request->user_id);
         return redirect()->route('posts.index');
     }
     public function dislike(Request $request, Post $post)
     {
-        $data_like = Like::where('post_id', 'like', $request->post_id)->where('user_id', 'like', Auth::id())->get();
-        $like = Like::find($data_like[0]->id)->delete();
+        // $data_like = Like::where('post_id', 'like', $request->post_id)->where('user_id', 'like', Auth::id())->get();
+        // $like = Like::find($data_like[0]->id)->delete();
+        $like = LikeDao::dislike($request->post_id, Auth::id());
 
         return redirect()->route('posts.index');
     }

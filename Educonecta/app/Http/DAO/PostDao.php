@@ -17,13 +17,24 @@ use PhpParser\Node\Stmt\TryCatch;
 class PostDao {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public static function SearchByCategory($value)
     {
-        $post = Post::where('category_id', 'like', $value);
-        return $post;
+        try {
+            $post = Post::where('category_id', 'like', $value);
+            
+            $response = new custResponse();
+            $response->success = true;
+            $response->message = "true";
+            $response->detail = $post;
+            return $response;
+        } catch (\Throwable $th) {
+            $response = new custResponse();
+            $response->success = false;
+            $response->message = "error";
+            $response->detail = $th;
+            return $response;
+        }
     }
 
     /**

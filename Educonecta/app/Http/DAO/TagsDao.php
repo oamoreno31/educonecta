@@ -38,4 +38,44 @@ class TagsDao
             return $response;
         }
     }
+    /**
+     * Get category by id
+     */
+    public static function getCategoryById($id){
+        try {
+            $tag = Tag::where('id', 'like', $id)->get();
+            
+            $response = new custResponse();
+            $response->success = true;
+            $response->message = "true";
+            $response->detail = $tag;
+            return $response;
+        } catch (\Throwable $th) {
+            $response = new custResponse();
+            $response->success = false;
+            $response->message = "error";
+            $response->detail = $th;
+            return $response;
+        }
+    }
+    /**
+     * Post count by Category
+     */
+    public static function countCategories($id){
+        try {
+            $count = Tag::where('id', 'like', $id)->count();
+            
+            $response = new custResponse();
+            $response->success = true;
+            $response->message = "true";
+            $response->detail = $count;
+            return $response;
+        } catch (\Throwable $th) {
+            $response = new custResponse();
+            $response->success = false;
+            $response->message = "error";
+            $response->detail = $th;
+            return $response;
+        }
+    }
 }

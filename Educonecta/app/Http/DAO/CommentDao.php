@@ -4,32 +4,30 @@ namespace App\Http\DAO;
 
 use App\Models\Tag;
 use App\Models\custResponse;
-use App\Models\Post;
-use App\Models\PostsTag;
+use App\Models\Comment;
 use Illuminate\Database\QueryException;
 
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 
 /**
- * Class PostTagsDao
+ * Class CommentDao
  * @package App\Http\DAO
  */
-class PostTagsDao
+class CommentDao
 {
     /**
      * Display a listing of the resource.
-     *
      */
-    public static function SearchByPost($postId)
+    public static function getByPost($postId)
     {
         try {
-            $postTags = PostsTag::where('posts_id', 'like', $postId)->get();
-
+            $comentarios = Comment::where('posts_id', 'like', $postId);
+            
             $response = new custResponse();
             $response->success = true;
             $response->message = '';
-            $response->detail = $postTags;
+            $response->detail = $comentarios;
             return $response;
         } catch (QueryException $error) {
             $response = new custResponse();
@@ -40,42 +38,17 @@ class PostTagsDao
         }
     }
     /**
-     * New record
-     *
+     * Get Comments count by post
      */
-    public static function newRecord($postId, $tagId)
+    public static function countCommentByPost($postId)
     {
         try {
-            $tags = PostsTag::create([
-                "posts_id" => $postId,
-                "tags_id" => $tagId,
-            ]);
-
+            $comentariosCount = Comment::where('posts_id', 'like', $postId)->count();
+            
             $response = new custResponse();
             $response->success = true;
             $response->message = '';
-            $response->detail = $tags;
-            return $response;
-        } catch (QueryException $error) {
-            $response = new custResponse();
-            $response->success = false;
-            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
-            $response->detail = $error;
-            return $response;
-        }
-    }
-    /**
-     * New record
-     *
-     */
-    public static function deleteRecord($id)
-    {
-        try {
-            $postTagDeleted = PostsTag::find($id)->delete();
-            $response = new custResponse();
-            $response->success = true;
-            $response->message = '';
-            $response->detail = $postTagDeleted;
+            $response->detail = $comentariosCount;
             return $response;
         } catch (QueryException $error) {
             $response = new custResponse();

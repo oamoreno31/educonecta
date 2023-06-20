@@ -106,9 +106,9 @@ class CategoryDao
     }
 
     /**
-     * Fetch Categories
+     * Fetch Categories to select fields
      */
-    public static function getAllCategories()
+    public static function getSelectCategories()
     {
         try {
             $categories = Category::where('id', '!=', "")->get();
@@ -123,6 +123,29 @@ class CategoryDao
             $response->success = true;
             $response->message = "";
             $response->detail = $options;
+            return $response;
+
+        } catch (QueryException $error) {
+            $response = new custResponse();
+            $response->success = false;
+            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
+            $response->detail = $error;
+            return $response;
+        }
+    }
+
+    /**
+     * Fetch Categories
+     */
+    public static function getAllCategories()
+    {
+        try {
+            $categories = Category::where('id', '!=', "")->get();
+
+            $response = new custResponse();
+            $response->success = true;
+            $response->message = "";
+            $response->detail = $categories;
             return $response;
 
         } catch (QueryException $error) {
