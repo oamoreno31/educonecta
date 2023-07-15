@@ -39,45 +39,49 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate();
-        
-        $categories = CategoryDao::getAllCategories()->detail;
+        if (Auth::check()) {
+            $posts = Post::paginate();
 
-        foreach ($categories as $key => $value) {
-            $cantidadPosts = PostDao::SearchByCategory($value->id)->detail->count();
-            $value["postsCounts"] = $cantidadPosts;
-        }
-        foreach ($posts as $key => $value) {
+            $categories = CategoryDao::getAllCategories()->detail;
 
-            $comentarios = CommentDao::countCommentByPost($value->id)->detail;
-            $value["comentsCount"] = $comentarios;
+            foreach ($categories as $key => $value) {
+                $cantidadPosts = PostDao::SearchByCategory($value->id)->detail->count();
+                $value["postsCounts"] = $cantidadPosts;
+            }
+            foreach ($posts as $key => $value) {
 
-            $likesCount = LikeDao::countLikesByPost($value->id)->detail;
-            $value["likesCount"] = $likesCount;
-            $category = CategoryDao::SearchById($value->category_id)->detail->get();
+                $comentarios = CommentDao::countCommentByPost($value->id)->detail;
+                $value["comentsCount"] = $comentarios;
 
-            $value["category_name"] = $category[0]->name;
-            $postTags = PostTagsDao::SearchByPost($value->id);
+                $likesCount = LikeDao::countLikesByPost($value->id)->detail;
+                $value["likesCount"] = $likesCount;
+                $category = CategoryDao::SearchById($value->category_id)->detail->get();
 
-            $tags = [];
-            foreach ($postTags as $key_tagPost => $value_tagPost) {
-                $tagRecord = TagsDao::getCategoryById($value_tagPost->tags_id)->detail;
-                $tagRecord_len = TagsDao::countCategories($value_tagPost->tags_id)->detail;
-                if ($tagRecord_len > 0) {
-                    foreach ($tagRecord as $key_tag => $value_tag) {
-                        $nuevoValor = array(
-                            'name' => $value_tag->name,
-                        );
-                        array_push($tags, $nuevoValor);
+                $value["category_name"] = $category[0]->name;
+                $postTags = PostTagsDao::SearchByPost($value->id);
+
+                $tags = [];
+                foreach ($postTags as $key_tagPost => $value_tagPost) {
+                    $tagRecord = TagsDao::getCategoryById($value_tagPost->tags_id)->detail;
+                    $tagRecord_len = TagsDao::countCategories($value_tagPost->tags_id)->detail;
+                    if ($tagRecord_len > 0) {
+                        foreach ($tagRecord as $key_tag => $value_tag) {
+                            $nuevoValor = array(
+                                'name' => $value_tag->name,
+                            );
+                            array_push($tags, $nuevoValor);
+                        }
                     }
                 }
+                $value["tags_names"] = $tags;
+                $value["userLikesPost"] = LikeDao::userLikesPost($value->id, Auth::id());
             }
-            $value["tags_names"] = $tags;
-            $value["userLikesPost"] = LikeDao::userLikesPost($value->id, Auth::id());
-        }
 
-        return view('post.index', compact('posts', "categories"))
-            ->with('i', (request()->input('page', 1) - 1) * $posts->perPage());
+            return view('post.index', compact('posts', "categories"))
+                ->with('i', (request()->input('page', 1) - 1) * $posts->perPage());
+        } else {
+            return view('auth/login');
+        }
     }
 
     /**
@@ -222,9 +226,9 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = PostDao::searchById($id);
-        if($post->success == true){
+        if ($post->success == true) {
             $post = $post->detail;
-        }else{
+        } else {
             return redirect()->route('categories.index')->with('error', $post->message);
         }
 
@@ -241,20 +245,20 @@ class PostController extends Controller
         } else {
             return redirect()->route('categories.index')->with('error', $tags_data->message);
         }
-        
-        
+
+
         $tagsData = PostTagsDao::SearchByPost($post->id);
-        if($tagsData->success == true){
+        if ($tagsData->success == true) {
             $tagsData = $tagsData->detail;
             $selectedTags = [];
             foreach ($tagsData as $key => $value) {
                 array_push($selectedTags, $value->tags_id);
             }
             $post["Tags"] = $selectedTags;
-        }else{
+        } else {
             return redirect()->route('categories.index')->with('error', $tagsData->message);
         }
-        
+
 
         return view('post.edit', compact('post', 'options', 'tags_data'));
     }
