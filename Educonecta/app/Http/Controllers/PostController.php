@@ -20,6 +20,7 @@ use App\Http\DAO\TagsDao;
 use App\Http\DAO\PostTagsDao;
 use App\Http\DAO\CommentDao;
 use App\Http\DAO\LikeDao;
+use App\Http\DAO\NFTstorageDao;
 use App\Models\PostFile;
 // use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -136,18 +137,18 @@ class PostController extends Controller
 
         $post_id = $post->id;
 
-        // $files_count = $request->files_count;
-        // echo ($files_count);
-        // foreach (range(1, $files_count) as $number) {
-        //     echo $number;
-        //     $image = $request->file('file_' . $number);
-        //     $imageReference = FirebaseDBController::uploadFile($image, $post_id);
-        //     $postFile = PostFile::create([
-        //         "post_id" => $post_id,
-        //         "file_name" => $image->getClientOriginalName(),
-        //         "file_url_fb" => $imageReference,
-        //     ]);
-        // }
+        $files_count = $request->files_count;
+        echo ($files_count);
+        foreach (range(1, $files_count) as $number) {
+            echo $number;
+            $file = $request->file('file_' . $number);
+            $fileReference = NFTstorageDao::uploadFile($file, $post_id);
+            $postFile = PostFile::create([
+                "post_id" => $post_id,
+                "file_name" => $file->getClientOriginalName(),
+                "file_url_fb" => $fileReference,
+            ]);
+        }
 
 
 
