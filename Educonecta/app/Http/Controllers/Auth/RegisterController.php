@@ -54,7 +54,6 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'documentId' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'role' => 'in:admin,teacher,student|required',
             'documentType' => 'in:CC,TI,TE,Otro|required',
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -73,7 +72,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'documentId' => $data['documentId'],
             'documentType' => $data['documentType'],
-            'role' => $data['role'],
+            'role' => "user",
             'password' => Hash::make($data['password']),
         ]);
     }

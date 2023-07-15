@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\DAO\PermissionDao;
+use App\Http\DAO\PermissionRoleDao;
 use App\Models\PermissionsRole;
 use Illuminate\Http\Request;
 
@@ -45,7 +47,8 @@ class PermissionsRoleController extends Controller
     {
         request()->validate(PermissionsRole::$rules);
 
-        $permissionsRole = PermissionsRole::create($request->all());
+        // $permissionsRole = PermissionsRole::create($request->all());
+        $permissionsRole = PermissionRoleDao::NewPermissionRole($request)->detail;
 
         return redirect()->route('permissions-roles.index')
             ->with('success', 'PermissionsRole created successfully.');
@@ -59,7 +62,8 @@ class PermissionsRoleController extends Controller
      */
     public function show($id)
     {
-        $permissionsRole = PermissionsRole::find($id);
+        // $permissionsRole = PermissionsRole::find($id);
+        $permissionsRole = PermissionRoleDao::SearchById($id);
 
         return view('permissions-role.show', compact('permissionsRole'));
     }
@@ -72,7 +76,8 @@ class PermissionsRoleController extends Controller
      */
     public function edit($id)
     {
-        $permissionsRole = PermissionsRole::find($id);
+        // $permissionsRole = PermissionsRole::find($id);
+        $permissionsRole = PermissionRoleDao::SearchById($id);
 
         return view('permissions-role.edit', compact('permissionsRole'));
     }
@@ -88,7 +93,8 @@ class PermissionsRoleController extends Controller
     {
         request()->validate(PermissionsRole::$rules);
 
-        $permissionsRole->update($request->all());
+        // $permissionsRole->update($request->all());
+        PermissionRoleDao::UpdatePermissionRole($permissionsRole, $request);
 
         return redirect()->route('permissions-roles.index')
             ->with('success', 'PermissionsRole updated successfully');
@@ -101,7 +107,8 @@ class PermissionsRoleController extends Controller
      */
     public function destroy($id)
     {
-        $permissionsRole = PermissionsRole::find($id)->delete();
+        // $permissionsRole = PermissionsRole::find($id)->delete();
+        $permissionsRole = PermissionRoleDao::DeletePermissionRole($id);
 
         return redirect()->route('permissions-roles.index')
             ->with('success', 'PermissionsRole deleted successfully');

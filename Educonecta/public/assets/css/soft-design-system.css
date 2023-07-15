@@ -2499,13 +2499,13 @@ progress {
   padding: 0.25rem 0.25rem;
 }
 
-.table-bordered> :not(caption)>* {
+/* .table-bordered> :not(caption)>* {
   border-width: 1px 0;
 }
 
 .table-bordered> :not(caption)>*>* {
   border-width: 0 1px;
-}
+} */
 
 .table-borderless> :not(caption)>*>* {
   border-bottom-width: 0;

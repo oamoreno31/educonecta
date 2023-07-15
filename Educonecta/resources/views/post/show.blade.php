@@ -55,14 +55,12 @@
                         </div>
                     </div>
 
-                    <div class="card-body">
-                        {!! $post->content !!}
-                    </div>
+                    <div class="card-body">{!! $post->content !!}</div>
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="card">
-                    <div class="card-header">Interacciones</div>
+                    <div class="card-header"><strong>Interacciones</strong></div>
                     <div class="card-body">
                         <div class="media">
                             <div class="media-body row">
@@ -87,10 +85,20 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div class="card">
+                    <div class="card-header"><strong>Archivos</strong></div>
+                    <div class="card-body">
+                        @foreach ($post->files as $key=>$file)
+                            <a href='{{$file["url"]}}' target="_blank" ><i class="fas fa-file-pdf" style="color:red;"></i> {{$file["name"]}}</a><br/>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
+        <hr>
         <div class="row">
-            <div class="col-md-10 mt-5">
+            <div class="col-lg-10">
                 <div class="card">
                     <div class="card-header">
                         Comentarios
@@ -109,12 +117,12 @@
                     </div>
                 </div>
             </div>
-            @if (Auth::check())
+                @if (Auth::check())
                 @php
-                    $comment = new App\Models\Comment();
+                $comment = new App\Models\Comment();
                 @endphp
                 @include('comment.create')
-            @endif
+                @endif
         </div>
     </section>
 @endsection

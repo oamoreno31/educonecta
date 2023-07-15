@@ -16,17 +16,25 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h3>{{Auth::user()->name}}</h3>
-                        @if (Auth::user()->role == 'teacher') 
-                            <h5><span class="badge bg-success">Maestro</span></h5>
-                        @elseif (Auth::user()->role == 'student') 
-                            <h5><span class="badge bg-success">Estudiante</span></h5>
+                        @if (Auth::user()->role == 'user') 
+                            <h5><span class="badge bg-success">Usuario</span></h5>
+                        @elseif (Auth::user()->role == 'admin') 
+                            <h5><span class="badge bg-success">Administrador</span></h5>
                         @endif
 
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-6" style="border-right: 1px solid rgba(77, 77, 77, 0.493);">Ver Perfil</div>
-                    <div class="col-lg-6">Cerrar Sesión</div>
+                    <div class="col-lg-6"><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form></div>
+                    
                 </div>
             </div>
         </div>

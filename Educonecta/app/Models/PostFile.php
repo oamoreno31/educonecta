@@ -26,8 +26,6 @@ class PostFile extends Model
     static $rules = [
 		'post_id' => 'required',
 		'file_name' => 'required',
-		'file_size' => 'required',
-		'file_blob' => 'required',
 		'file_url_fb' => 'required',
     ];
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PostsCategory;
+use App\Http\DAO\PostCategoryDao;
 use Illuminate\Http\Request;
 
 /**
@@ -45,7 +46,8 @@ class PostsCategoryController extends Controller
     {
         request()->validate(PostsCategory::$rules);
 
-        $postsCategory = PostsCategory::create($request->all());
+        // $postsCategory = PostsCategory::create($request->all());
+        $postsCategory = PostCategoryDao::NewPostCategory($request)->detail;
 
         return redirect()->route('posts-categories.index')
             ->with('success', 'PostsCategory created successfully.');
@@ -59,7 +61,7 @@ class PostsCategoryController extends Controller
      */
     public function show($id)
     {
-        $postsCategory = PostsCategory::find($id);
+        $postsCategory = PostCategoryDao::SearchById($id)->detail;
 
         return view('posts-category.show', compact('postsCategory'));
     }
@@ -72,7 +74,9 @@ class PostsCategoryController extends Controller
      */
     public function edit($id)
     {
-        $postsCategory = PostsCategory::find($id);
+        // $postsCategory = PostsCategory::find($id);
+        $postsCategory = PostCategoryDao::SearchById($id)->detail;
+
 
         return view('posts-category.edit', compact('postsCategory'));
     }
@@ -88,7 +92,8 @@ class PostsCategoryController extends Controller
     {
         request()->validate(PostsCategory::$rules);
 
-        $postsCategory->update($request->all());
+        // $postsCategory->update($request->all());
+        PostCategoryDao::UpdatePostCategory($postsCategory, $request);
 
         return redirect()->route('posts-categories.index')
             ->with('success', 'PostsCategory updated successfully');
@@ -101,7 +106,8 @@ class PostsCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $postsCategory = PostsCategory::find($id)->delete();
+        // $postsCategory = PostsCategory::find($id)->delete();
+        $postsCategory = PostCategoryDao::DeletePostCategory($id)->detail;
 
         return redirect()->route('posts-categories.index')
             ->with('success', 'PostsCategory deleted successfully');

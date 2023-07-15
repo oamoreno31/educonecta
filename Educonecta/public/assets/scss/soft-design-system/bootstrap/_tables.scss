@@ -75,16 +75,16 @@
 // Therefor we add top and border bottoms to the `tr`s and left and right borders
 // to the `td`s or `th`s
 
-.table-bordered {
-  > :not(caption) > * {
-    border-width: $table-border-width 0;
+// .table-bordered {
+//   > :not(caption) > * {
+//     border-width: $table-border-width 0;
 
-    // stylelint-disable-next-line selector-max-universal
-    > * {
-      border-width: 0 $table-border-width;
-    }
-  }
-}
+//     // stylelint-disable-next-line selector-max-universal
+//     > * {
+//       border-width: 0 $table-border-width;
+//     }
+//   }
+// }
 
 .table-borderless {
   // stylelint-disable-next-line selector-max-universal

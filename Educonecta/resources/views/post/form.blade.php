@@ -40,11 +40,32 @@ tinymce.init({ selector: '#content' }); $('Tags').selectpicker();</script>
             </div>
         </div>
         
-        <div class="form-group">
-            <!-- {{ Form::label('content') }} -->
-            <label for="">Contenido</label>
-            {{ Form::textarea('content', $post->content, ['class' => 'form-control' . ($errors->has('content') ? ' is-invalid' : ''), 'placeholder' => 'Content']) }}
-            {!! $errors->first('content', '<div class="invalid-feedback">:message</div>') !!}
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <!-- {{ Form::label('content') }} -->
+                    <label for="">Contenido</label>
+                    {{ Form::textarea('content', $post->content, ['class' => 'form-control' . ($errors->has('content') ? ' is-invalid' : ''), 'placeholder' => 'Content']) }}
+                    {!! $errors->first('content', '<div class="invalid-feedback">:message</div>') !!}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card" style="margin-top: 15px;">
+                    <div class="card-header">
+                        <strong>Cargar archivos</strong>
+                    </div>
+                    <input type="hidden" name="files_count" id="files_count">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-12"><button type="button" class="btn btn-primary" id="btnNewFile" onclick="btnAddOnCLick()">Nuevo Archivo</button></div>
+                                <div class="col-lg-12" id="filesContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <!-- {{ Form::label('post_date') }} -->
@@ -66,10 +87,11 @@ tinymce.init({ selector: '#content' }); $('Tags').selectpicker();</script>
             {{ Form::text('likes', 0, ['class' => 'form-control' . ($errors->has('likes') ? ' is-invalid' : ''), 'placeholder' => 'likes', 'hidden' => 'true']) }}
             {!! $errors->first('likes', '<div class="invalid-feedback">:message</div>') !!}
         </div>
-
     </div>
+    <br/>
     <div class="box-footer mt20">
         <button type="submit" class="btn btn-primary">{{ __('Publicar') }}</button>
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ asset('assets/js/educonecta_custom_lib.js') }}"></script>

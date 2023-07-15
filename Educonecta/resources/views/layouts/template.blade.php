@@ -58,10 +58,10 @@
                 <li class="nav-item my-auto ms-3 ms-lg-0 dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        @if (Auth::user()->role == 'teacher')
-                            <span class="badge bg-success">Maestro</span>
-                        @elseif (Auth::user()->role == 'student')
-                            <span class="badge bg-success">Estudiante</span>
+                        @if (Auth::user()->role == 'user')
+                            <span class="badge bg-success">Usuario</span>
+                        @elseif (Auth::user()->role == 'admin')
+                            <span class="badge bg-success">Administrador</span>
                         @endif
                         | {{ Auth::user()->name }}
                     </a>
