@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PostFile;
 use Illuminate\Http\Request;
+use App\Http\DAO\PostFileDao;
 
 /**
  * Class PostFileController
@@ -45,7 +46,8 @@ class PostFileController extends Controller
     {
         request()->validate(PostFile::$rules);
 
-        $postFile = PostFile::create($request->all());
+        // $postFile = PostFile::create($request->all());
+        $postFile = PostFileDao::NewPostFile($request)->detail;
 
         return redirect()->route('post-files.index')
             ->with('success', 'PostFile created successfully.');
@@ -59,7 +61,8 @@ class PostFileController extends Controller
      */
     public function show($id)
     {
-        $postFile = PostFile::find($id);
+        // $postFile = PostFile::find($id);
+        $postFile = PostFileDao::SearchById($id)->detail;
 
         return view('post-file.show', compact('postFile'));
     }
@@ -72,7 +75,8 @@ class PostFileController extends Controller
      */
     public function edit($id)
     {
-        $postFile = PostFile::find($id);
+        // $postFile = PostFile::find($id);
+        $postFile = PostFileDao::SearchById($id)->detail;
 
         return view('post-file.edit', compact('postFile'));
     }
@@ -88,8 +92,8 @@ class PostFileController extends Controller
     {
         request()->validate(PostFile::$rules);
 
-        $postFile->update($request->all());
-
+        // $postFile->update($request->all());
+        PostFileDao::UpdatePostFile($postFile, $request)->detail;
         return redirect()->route('post-files.index')
             ->with('success', 'PostFile updated successfully');
     }
@@ -101,7 +105,8 @@ class PostFileController extends Controller
      */
     public function destroy($id)
     {
-        $postFile = PostFile::find($id)->delete();
+        // $postFile = PostFile::find($id)->delete();
+        $postFile = PostFileDao::DeletePostFile($id)->detail;
 
         return redirect()->route('post-files.index')
             ->with('success', 'PostFile deleted successfully');

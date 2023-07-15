@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('file_name');
             // $table->string('file_size');
             // $table->string('file_blob');
-            $table->longText('file_url_fb');
+            $table->longText('file_hash');
             $table->foreign('post_id', 'fk_post_file')->references('id')->on('posts')->onDelete('restrict')->onUpdate('restrict');
 
             $table->timestamps();

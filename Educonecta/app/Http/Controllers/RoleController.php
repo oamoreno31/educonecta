@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\DAO\PostDao;
 use App\Models\Role;
+use App\Http\DAO\RoleDao;
 use Illuminate\Http\Request;
 
 /**
@@ -45,7 +47,7 @@ class RoleController extends Controller
     {
         request()->validate(Role::$rules);
 
-        $role = Role::create($request->all());
+        $role = RoleDao::NewRole($request)->detail;
 
         return redirect()->route('roles.index')
             ->with('success', 'Role created successfully.');
@@ -59,7 +61,8 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
+        
+        $role = RoleDao::SearchById($id)->detail;
 
         return view('role.show', compact('role'));
     }
@@ -72,7 +75,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        $role = Role::find($id);
+        $role = RoleDao::SearchById($id)->detail;
 
         return view('role.edit', compact('role'));
     }
@@ -88,7 +91,7 @@ class RoleController extends Controller
     {
         request()->validate(Role::$rules);
 
-        $role->update($request->all());
+        RoleDao::UpdateRole($role, $request);
 
         return redirect()->route('roles.index')
             ->with('success', 'Role updated successfully');
@@ -101,7 +104,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id)->delete();
+        $role = RoleDao::DeleteRole($id)->detail;
 
         return redirect()->route('roles.index')
             ->with('success', 'Role deleted successfully');

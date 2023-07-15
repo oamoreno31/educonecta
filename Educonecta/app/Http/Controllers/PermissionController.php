@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permission;
+use App\Http\DAO\PermissionDao;
 use Illuminate\Http\Request;
 
 /**
@@ -45,7 +46,8 @@ class PermissionController extends Controller
     {
         request()->validate(Permission::$rules);
 
-        $permission = Permission::create($request->all());
+        // $permission = Permission::create($request->all());
+        $permission = PermissionDao::NewPermission($request)->detail;
 
         return redirect()->route('permissions.index')
             ->with('success', 'Permission created successfully.');
@@ -59,7 +61,8 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        $permission = Permission::find($id);
+        // $permission = Permission::find($id);
+        $permission = PermissionDao::SearchById($id)->detail;
 
         return view('permission.show', compact('permission'));
     }
@@ -72,7 +75,8 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        $permission = Permission::find($id);
+        // $permission = Permission::find($id);
+        $permission = PermissionDao::SearchById($id)->detail;
 
         return view('permission.edit', compact('permission'));
     }
@@ -88,8 +92,8 @@ class PermissionController extends Controller
     {
         request()->validate(Permission::$rules);
 
-        $permission->update($request->all());
-
+        // $permission->update($request->all());
+        PermissionDao::UpdatePersmission($permission, $request);
         return redirect()->route('permissions.index')
             ->with('success', 'Permission updated successfully');
     }
@@ -101,7 +105,8 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        $permission = Permission::find($id)->delete();
+        // $permission = Permission::find($id)->delete();
+        $permission = PermissionDao::DeletePersmission($id)->detail;
 
         return redirect()->route('permissions.index')
             ->with('success', 'Permission deleted successfully');

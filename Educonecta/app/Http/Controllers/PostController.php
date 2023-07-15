@@ -40,7 +40,7 @@ class PostController extends Controller
     {
         $posts = Post::paginate();
         
-        $categories = CategoryDao::getAllCategories();
+        $categories = CategoryDao::getAllCategories()->detail;
 
         foreach ($categories as $key => $value) {
             $cantidadPosts = PostDao::SearchByCategory($value->id)->detail->count();
