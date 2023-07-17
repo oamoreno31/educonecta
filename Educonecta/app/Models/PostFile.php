@@ -26,7 +26,7 @@ class PostFile extends Model
     static $rules = [
 		'post_id' => 'required',
 		'file_name' => 'required',
-		'file_url_fb' => 'required',
+		'file_hash' => 'required',
     ];
 
     protected $perPage = 20;
@@ -36,7 +36,7 @@ class PostFile extends Model
      *
      * @var array
      */
-    protected $fillable = ['post_id','file_name','file_size','file_blob','file_url_fb'];
+    protected $fillable = ['post_id','file_name','file_hash'];
 
 
     /**
