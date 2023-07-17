@@ -23,29 +23,26 @@ class NFTstorageDao
     {
         try {
 
-            $url = "https://httpbin.org/post";
-            // Los datos de formulario
-            $datos = [
-                "nombre" => "Luis Cabrera Benito",
-                "web" => "https://parzibyte.me/blog",
-            ];
-            // Crear opciones de la petición HTTP
-            $opciones = array(
-                "http" => array(
-                    "header" => "Content-type: application/x-www-form-urlencoded\r\n",
-                    "method" => "POST",
-                    "content" => http_build_query($datos), # Agregar el contenido definido antes
-                ),
-            );
-            # Preparar petición
-            $contexto = stream_context_create($opciones);
-            # Hacerla
-            $resultado = file_get_contents($url, false, $contexto);
-
+            // $file = $request->file('file_' . $number);
+            $filePath = $file->getRealPath();
+            $ch = curl_init();
+            curl_setopt_array($ch, [
+                CURLOPT_URL => 'https://api.nft.storage/upload',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => [
+                    'file' => new \CurlFile($filePath, $file->getClientMimeType(), $file->getClientOriginalName())
+                ],
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: multipart/form-data',
+                    'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDk3QjI5RWJjNzU3ZDJDRWUxQjBEMkRjQTg5YTEzRjU3YzUwOWYyMWQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4NzMxMjEzNjE1MywibmFtZSI6IklQRlMgd2l0aCBQb3N0bWFuIn0.x3wnN8mbo_ALhb9yTQkwZKkFz_yWpVzOPgw6s4Kc8CA'
+                ]
+            ]);
+            $result = curl_exec($ch);
             $response = new custResponse();
             $response->success = true;
             $response->message = "true";
-            $response->detail = $resultado;
+            $response->detail = json_decode($result)->value->cid;
             return $response;
         } catch (\Throwable $th) {
             $response = new custResponse();

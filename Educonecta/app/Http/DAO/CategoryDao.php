@@ -111,20 +111,26 @@ class CategoryDao
     public static function getSelectCategories()
     {
         try {
+            $options = [];
             $categories = Category::where('id', '!=', "")->get();
             $nuevaCategoria = array(
                 'name' => '-- Seleccione una opción --',
                 'id' => ''
             );
-            array_push($categories['categories'], $nuevaCategoria);
-            $options = array_column($categories['categories'], 'name', 'id');
-
+            array_push($options, $nuevaCategoria);
+            
+            foreach ($categories as $key => $value) {
+                $nuevoValor = array(
+                    'name' => $value->name,
+                    'id' => $value->id,
+                );
+                array_push($options, $nuevoValor);
+            }
             $response = new custResponse();
             $response->success = true;
             $response->message = "";
             $response->detail = $options;
             return $response;
-
         } catch (QueryException $error) {
             $response = new custResponse();
             $response->success = false;
@@ -147,7 +153,6 @@ class CategoryDao
             $response->message = "";
             $response->detail = $categories;
             return $response;
-
         } catch (QueryException $error) {
             $response = new custResponse();
             $response->success = false;

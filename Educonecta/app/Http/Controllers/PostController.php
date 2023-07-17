@@ -58,7 +58,7 @@ class PostController extends Controller
                 $category = CategoryDao::SearchById($value->category_id)->detail->get();
 
                 $value["category_name"] = $category[0]->name;
-                $postTags = PostTagsDao::SearchByPost($value->id);
+                $postTags = PostTagsDao::SearchByPost($value->id)->detail;
 
                 $tags = [];
                 foreach ($postTags as $key_tagPost => $value_tagPost) {
@@ -143,19 +143,17 @@ class PostController extends Controller
 
         $files_count = $request->files_count;
         echo ($files_count);
+        
         foreach (range(1, $files_count) as $number) {
-            echo $number;
+            
             $file = $request->file('file_' . $number);
-            $fileReference = NFTstorageDao::uploadFile($file, $post_id);
+            $hash = NFTstorageDao::UploadFile($file);
             $postFile = PostFile::create([
                 "post_id" => $post_id,
                 "file_name" => $file->getClientOriginalName(),
-                "file_url_fb" => $fileReference,
+                "file_hash" => $hash->detail,
             ]);
         }
-
-
-
 
         foreach ($Tags as $key => $value) {
             $nuevoValor = array(
@@ -191,7 +189,7 @@ class PostController extends Controller
         foreach ($postFiles as $key_tpostFiles => $value_postFile) {
             $nuevoValor = array(
                 'name' => $value_postFile->file_name,
-                'url' => $value_postFile->file_url_fb,
+                'url' => "https://ipfs.io/ipfs/".$value_postFile->file_hash,
             );
             array_push($files_, $nuevoValor);
         }
@@ -211,8 +209,8 @@ class PostController extends Controller
         $post["files"] = $files_;
 
         // $category = Category::where('id', 'like', $post->category_id)->get();
-        $category = CategoryDao::SearchById($post->category_id);
-        $post["category_name"] = $category[0]->name;
+        $category = CategoryDao::SearchById($post->category_id)->detail;
+        $post["category_name"] = $category->name;
 
         return view('post.show', compact('post'));
     }
