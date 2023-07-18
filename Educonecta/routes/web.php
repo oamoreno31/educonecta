@@ -34,6 +34,9 @@ Route::middleware(['role:admin'])->group(function () {
     Route::resource('/categories', App\Http\Controllers\CategoryController::class);
 });
 
+Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
 Route::resource('/comments', App\Http\Controllers\CommentController::class);
 Route::resource('/permissions', App\Http\Controllers\PermissionController::class);
 Route::resource('/roles', App\Http\Controllers\RoleController::class);

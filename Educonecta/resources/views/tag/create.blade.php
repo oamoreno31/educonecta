@@ -6,23 +6,27 @@
 
 @section('content')
     <section class="content container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+
+        @if ($message = Session::get('error'))
+            <div class="alert alert-dark">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-md-8">
 
                 @includeif('partials.errors')
 
-                <div class="card card-default">
-                    <div class="card-header">
-                        <span class="card-title">{{ __('Create') }} Tag</span>
+                <div class="card mb-4">
+                    <div class="card-header bg-dark d-flex justify-content-between">
+                        <span></span>
+                        <a class="btn btn-primary" href="{{ route('tags.index') }}">{{ __('Volver') }}</a>
                     </div>
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('tags.store') }}"  role="form" enctype="multipart/form-data">
-                            @csrf
-
-                            @include('tag.form')
-
-                        </form>
-                    </div>
+                    <form method="POST" action="{{ route('tags.store') }}"  role="form" enctype="multipart/form-data">
+                        @csrf
+                        @include('tag.form')
+                    </form>
                 </div>
             </div>
         </div>
