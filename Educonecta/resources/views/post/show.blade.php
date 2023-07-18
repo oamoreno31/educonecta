@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@section('template_title')
+Visualizando Publicacion
+@endsection
 @php
 function time_at($fecha)
 {
@@ -15,7 +18,12 @@ if ($segundos < 60) { return 'hace unos segundos' ; } elseif ($minutos < 60) { r
                     <div class="float-right">
                         <div class="row">
                             <div class="col-lg-12">
-                                <a class="btn btn-primary" href="{{ route('posts.index') }}">Regresar</a>
+                                <a class="btn rounded-pill btn-primary" href="{{ route('posts.index') }}">Regresar</a>
+                                
+                                @if (Auth::user()->id == $post->author_id)
+                                <a class="btn rounded-pill btn-primary" href="{{ route('posts.edit',$post->id) }}">Editar</a>
+                                @endif
+                                <hr>
                                 <h3>{{ $post->title }}</h3>
                             </div>
                             <div class="col-lg-6">
@@ -52,27 +60,33 @@ if ($segundos < 60) { return 'hace unos segundos' ; } elseif ($minutos < 60) { r
                                 <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                                 <input type="hidden" name="route" value="posts.show">
                                 @csrf
-                                <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">Me Gusta</button>
+                                <button type="submit" class="btn  rounded-pill btn-sm btn-primary d-grid gap-2">Me Gusta</button>
                             </form>
                             @else
-                            <form action="{{ route('posts.dislike', $post->id) }}" method="POST" class="d-grid gap-2">
+                            <form action="{{ route('posts.dislike', $post->id) }}" method="POST" class="d-grid gap-2"  style="margin-top: 10px;">
                                 <input type="hidden" name="post_id" value="{{$post->id}}">
                                 <input type="hidden" name="route" value="posts.show">
                                 @csrf
-                                <button type="submit" class="btn btn-sm btn-primary d-grid gap-2">No Me gusta</button>
+                                <button type="submit" class="btn  rounded-pill btn-sm btn-primary d-grid gap-2">No Me gusta</button>
                             </form>
                             @endif
-                            <p class="d-grid gap-2"><a href="{{ route('posts.pdf', ['post' => $post->id]) }}" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-eye" style='font-size:15px;'></i> Ver PDF</a></p>
-                            <p class="d-grid gap-2"><a href="{{ route('posts.download', ['post' => $post->id]) }}" class="btn btn-sm" style="color: black;"><i class="fa fa-fw fa-arrow-down" style='font-size:15px;'></i>Descargar</a></p>
+                            
+                            <div class="d-grid gap-2" style="margin-top: 10px; margin-bottom: 10px;">
+                                <a href="{{ route('posts.pdf', ['post' => $post->id]) }}" class="btn  rounded-pill btn-sm btn-secondary d-grid gap-2"  style="display: block;">Ver PDF</a>
+                                <a href="{{ route('posts.download', ['post' => $post->id]) }}" class="btn  rounded-pill btn-sm btn-secondary d-grid gap-2" style="display: block;">Descargar</a>
+                            </div>
+                            
+                            @if (Auth::user()->role == 'admin')
+                            <hr>
+                                <form action="{{ route('posts.destroy',$post->id) }}}" method="POST" class="d-grid gap-2">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"  class="btn rounded-pill btn-dark btn-sm">Eliminar</button>
+                                </form>
+                            @endif
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <hr>
-            <div class="card">
-                <div class="card-header"><strong>Archivos</strong></div>
-                <div class="card-body">
-                    <br />
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\DAO;
 use App\Models\Tag;
 use App\Models\custResponse;
 use App\Models\Post;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 
 use Illuminate\Http\Request;
@@ -84,7 +85,9 @@ class PostDao {
      */
     public static function deletePost($id){
         try {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
             $post = Post::find($id)->delete();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
             
             $response = new custResponse();
             $response->success = true;

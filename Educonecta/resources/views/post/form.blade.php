@@ -4,10 +4,11 @@
 <div class="col-xxl">
     <div class="card mb-4">
     <div class="card-header d-flex align-items-center justify-content-between">
+        <a class="btn rounded-pill btn-primary" href="{{ route('posts.show', $post->id) }}">Regresar</a>
         <h5 class="mb-0"></h5>
         <small class="text-muted float-end"><div class="row justify-content-end">
-            <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary">Publicar</button>
+            <div class="col-lg-10">
+                <button type="submit" class="btn rounded-pill btn-primary">Guardar</button>
             </div>
         </div></small>
     </div>

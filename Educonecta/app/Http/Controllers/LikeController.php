@@ -48,7 +48,7 @@ class LikeController extends Controller
         $like = Like::create($request->all());
 
         return redirect()->route('likes.index')
-            ->with('success', 'Like created successfully.');
+            ->with('success', '');
     }
 
     /**
@@ -91,7 +91,7 @@ class LikeController extends Controller
         $like->update($request->all());
 
         return redirect()->route('likes.index')
-            ->with('success', 'Like updated successfully');
+            ->with('success', '');
     }
 
     /**
@@ -104,6 +104,6 @@ class LikeController extends Controller
         $like = Like::find($id)->delete();
 
         return redirect()->route('likes.index')
-            ->with('success', 'Like deleted successfully');
+            ->with('success', '');
     }
 }

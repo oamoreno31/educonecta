@@ -59,9 +59,9 @@ class PostController extends Controller
 
                 $likesCount = LikeDao::countLikesByPost($value->id)->detail;
                 $value["likesCount"] = $likesCount;
-                $category = CategoryDao::SearchById($value->category_id)->detail->get();
+                $category = CategoryDao::SearchById($value->category_id)->detail;
 
-                $value["category_name"] = $category[0]->name;
+                $value["category_name"] = $category->name;
                 $postTags = PostTagsDao::SearchByPost($value->id)->detail;
 
                 $tags = [];
@@ -171,7 +171,7 @@ class PostController extends Controller
 
 
         return redirect()->route('posts.index')
-            ->with('success', 'Post created successfully.');
+            ->with('success', 'Se ha creado la publicación correctamente.');
     }
 
     /**
@@ -217,6 +217,9 @@ class PostController extends Controller
         $category = CategoryDao::SearchById($post->category_id)->detail;
         $post["category_name"] = $category->name;
 
+        $userLikesPost = LikeDao::userLikesPost($post->id, Auth::user()->id)->detail;
+        $post["userLikesPost"] = $userLikesPost;
+
         return view('post.show', compact('post'));
     }
 
@@ -237,7 +240,18 @@ class PostController extends Controller
 
         $fetchCategories = CategoryDao::getSelectCategories();
         if ($fetchCategories->success == true) {
-            $options = $fetchCategories->detail;
+            $categories = CategoryDao::getAllCategories()->detail;
+            $ArrayCategories = [];
+            $ArrayCategories = CategoryDao::getSelectCategories()->detail;
+    
+            foreach ($categories as $key => $value) {
+                $nuevaCategoria = array(
+                    'name' => $value->name,
+                    'id' => $value->id
+                );
+                array_push($ArrayCategories, $nuevaCategoria);
+            }
+            $options = array_column($ArrayCategories, 'name', 'id');
         } else {
             return redirect()->route('categories.index')->with('error', $fetchCategories->message);
         }
@@ -304,7 +318,7 @@ class PostController extends Controller
             array_push($arrayTags, $nuevoValor);
         }
         return redirect()->route('posts.index')
-            ->with('success', 'Post updated successfully');
+            ->with('success', 'Publicación Actualizada correctamente.');
     }
     /**
      * Update the specified resource in storage.
@@ -338,10 +352,11 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::find($id)->delete();
+        // $post = Post::find($id)->delete();
+        $post = PostDao::deletePost($id);
 
         return redirect()->route('posts.index')
-            ->with('success', 'Post deleted successfully');
+            ->with('success', 'Se ha eliminado la publicación');
     }
 
     public function pdf($id)

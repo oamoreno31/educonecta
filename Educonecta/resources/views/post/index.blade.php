@@ -6,7 +6,7 @@ Publicaciones
 
 @section('content')
     @if ($message = Session::get('success'))
-    <div class="alert alert-success"> <p>{{ $message }}</p> </div>
+        <div class="alert alert-primary" role="alert">{{ $message }}</div>
     @endif
 
     <?php
@@ -61,13 +61,13 @@ Publicaciones
         }
         $posts_ = array_sort($posts, 'created_at', SORT_DESC)          
     ?>
-    <div class="row">
+    <div class="row" >
         <div class="col-md-6 col-lg-4">
             <div class="card text-center mb-3">
             <div class="card-body">
                 <h5 class="card-title">Realiza una nueva publicación</h5>
                 <p class="card-text">¡Es hora de brillar! ¡Hazlo con una publicación nueva que inspire y motive a otros!</p>
-                <a href="{{ route('posts.create') }}" class="btn btn-primary">Crear Publicacion</a>
+                <a href="{{ route('posts.create') }}" class="btn rounded-pill btn-primary">Crear Publicación</a>
             </div>
             </div>
         </div>
@@ -75,17 +75,32 @@ Publicaciones
         <?php
             $res_tiempo = tiempo_publicacion($post -> created_at)
         ?>
-            <div class="col-lg-4">
+            <div class="col-lg-4" style="margin-top: 10px;">
                 <div class="card">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="card-body">
+                            <div class="card-body" style="display: flex; flex-direction: column; justify-content: space-between; height: 270px;">
                                 <div class="row">
                                     <div class="col-lg-7"><h5 class="card-title">{{$post -> title}}</h5></div>
-                                    <div class="col-lg-5"><p class="card-text" style="text-align: right;"><small class="text-muted" >{{$res_tiempo}}</small></p></div>
+                                    <div class="col-lg-5">
+                                        <p class="card-text" style="text-align: right;">
+                                            <small class="text-muted" >{{$res_tiempo}}</small> 
+                                            @if (Auth::user()->id == $post->author_id)
+                                                <i class='bx bxs-user' 
+                                                    style="color: goldenrod;"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-offset="0,4"
+                                                    data-bs-placement="right"
+                                                    data-bs-html="true"
+                                                    title="<span>Tu realizaste esta publicación</span>"
+                                                    ></i>
+                                            @endif
+                                        </p>
+                                    </div>
                                 </div>
                                 
                                 <p class="card-text">{{$post->description}}</p>
+                                <div class="row"><div class="col-lg-12"><p class="text-muted">{{$post -> author_name}}</p></div></div>
                                 <div class="row">
                                     <div class="col-lg-5">
                                         <div class="row">
@@ -114,8 +129,11 @@ Publicaciones
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-12">
-                                        <a href="{{ route('posts.show',$post->id) }}" class="card-link">Ver publicación</a>
+                                    <div class="col-lg-8">
+                                    <span class="badge rounded-pill bg-primary" style="display: block;"><a href="{{ route('posts.show',$post->id) }}" class="card-link" style="color: white;">Ver publicación</a></span>
+                                    </div>
+                                    <div class="col-lg-4" >
+                                        <span>{{$post->category_name}}</span> 
                                     </div>
                                 </div>
                                 

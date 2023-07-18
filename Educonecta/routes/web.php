@@ -22,7 +22,7 @@ Route::get('/', function () {
     if (Auth::user() == ''){
         return view('auth/login');
     }else{
-        return view('welcome');
+        return view('home');
     }
 });
 
