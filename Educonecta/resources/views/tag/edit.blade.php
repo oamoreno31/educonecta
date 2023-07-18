@@ -1,29 +1,31 @@
 @extends('layouts.app')
 
 @section('template_title')
-    {{ __('Update') }} Tag
+    {{ __('Actualizar') }} Tag
 @endsection
 
 @section('content')
-    <section class="content container-fluid">
-        <div class="">
-            <div class="col-md-12">
+    @if ($message = Session::get('error'))
+        <div class="alert alert-dark">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
+    <section class="content">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="col-md-5">
 
                 @includeif('partials.errors')
 
-                <div class="card card-default">
-                    <div class="card-header">
-                        <span class="card-title">{{ __('Update') }} Tag</span>
+                <div class="card mb-4">
+                    <div class="card-header bg-dark d-flex justify-content-between">
+                        <span></span>
+                        <a class="btn btn-primary" href="{{ URL::previous() }}">{{ __('Volver') }}</a>
                     </div>
-                    <div class="card-body">
                         <form method="POST" action="{{ route('tags.update', $tag->id) }}"  role="form" enctype="multipart/form-data">
                             {{ method_field('PATCH') }}
                             @csrf
-
                             @include('tag.form')
-
                         </form>
-                    </div>
                 </div>
             </div>
         </div>

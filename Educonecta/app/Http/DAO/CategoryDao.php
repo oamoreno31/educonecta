@@ -11,15 +11,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 
-/**
- * Class PostDao
- * @package App\Http\DAO
- */
 class CategoryDao
 {
-    /**
-     * New Category
-     */
     public static function NewCategory($request)
     {
         try {
@@ -39,15 +32,13 @@ class CategoryDao
             if ($error->getCode() == "23000") {
                 $response->message = "Este registro ya existe.";
             } else {
-                $response->message = "Ha ocurrido un error, contactate con un administrador\nCode: " + $error->getCode();
+                $response->message = "Ha ocurrido un error, contactate con un administrador\nCode: " . $error->getCode();
             }
             $response->detail = $error;
             return $response;
         }
     }
-    /**
-     * Update Category
-     */
+
     public static function updateCategory($request, $category)
     {
         try {
@@ -64,50 +55,45 @@ class CategoryDao
         } catch (QueryException $error) {
             $response = new custResponse();
             $response->success = false;
-            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
+            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' . $error->getCode();
             $response->detail = $error;
             return $response;
         }
     }
-    /**
-     * Delete Category
-     */
+
     public static function DeleteCategory($id)
     {
         try {
             $category = Category::find($id)->delete();
         } catch (QueryException $error) {
+
             $response = new custResponse();
             $response->success = false;
-            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
+            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' . $error->getCode();
             $response->detail = $error;
             return $response;
         }
+        return $category;
     }
-    /**
-     * Search by ID
-     */
+
     public static function SearchById($id)
     {
         try {
             $category = Category::find($id);
             $response = new custResponse();
             $response->success = true;
-            $response->message = "";
+            $response->message = "true";
             $response->detail = $category;
             return $response;
         } catch (QueryException $error) {
             $response = new custResponse();
             $response->success = false;
-            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
+            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' . $error->getCode();
             $response->detail = $error;
             return $response;
         }
     }
 
-    /**
-     * Fetch Categories to select fields
-     */
     public static function getSelectCategories()
     {
         try {
@@ -118,7 +104,7 @@ class CategoryDao
                 'id' => ''
             );
             array_push($options, $nuevaCategoria);
-            
+
             foreach ($categories as $key => $value) {
                 $nuevoValor = array(
                     'name' => $value->name,
@@ -134,15 +120,12 @@ class CategoryDao
         } catch (QueryException $error) {
             $response = new custResponse();
             $response->success = false;
-            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
+            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' . $error->getCode();
             $response->detail = $error;
             return $response;
         }
     }
 
-    /**
-     * Fetch Categories
-     */
     public static function getAllCategories()
     {
         try {
@@ -156,7 +139,7 @@ class CategoryDao
         } catch (QueryException $error) {
             $response = new custResponse();
             $response->success = false;
-            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
+            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' . $error->getCode();
             $response->detail = $error;
             return $response;
         }

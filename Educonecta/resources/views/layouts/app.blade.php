@@ -69,7 +69,7 @@
       <div class="layout-container">
         <!-- Menu -->
 
-      
+
           @extends('layouts.template')
         <!-- / Menu -->
 
@@ -126,7 +126,7 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
+                      <a class="dropdown-item" href="{{ route('profile.edit') }}">
                         <i class="bx bx-user me-2"></i>
                         <span class="align-middle">Mi Perfil</span>
                       </a>
@@ -158,7 +158,7 @@
 
             <div class="container-fluid flex-grow-1 container-p-y">
               <!-- Layout Demo -->
-              <div class="layout-demo-wrapper">@yield('content')</div>
+              <div>@yield('content')</div>
               <!--/ Layout Demo -->
             </div>
             <!-- / Content -->
