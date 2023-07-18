@@ -30,7 +30,10 @@ Route::get('/', function () {
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('/posts', App\Http\Controllers\PostController::class);
-Route::resource('/categories', App\Http\Controllers\CategoryController::class);
+Route::middleware(['role:admin'])->group(function () {
+    Route::resource('/categories', App\Http\Controllers\CategoryController::class);
+});
+
 Route::resource('/comments', App\Http\Controllers\CommentController::class);
 Route::resource('/permissions', App\Http\Controllers\PermissionController::class);
 Route::resource('/roles', App\Http\Controllers\RoleController::class);
