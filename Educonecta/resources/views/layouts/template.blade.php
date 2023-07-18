@@ -28,7 +28,12 @@
                         aria-labelledby="dropdownMenuPages">
                         <div class="d-none d-lg-block">
                             <a href="{{ route('home') }}" class="dropdown-item border-radius-md"> <span class="ps-3">home</span> </a>
-                            <a href="{{ route('categories.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Categorias</span> </a>
+
+                            <a href="{{ route('categories.index') }}" class="dropdown-item border-radius-md">
+                                @if (Auth::user()->role == 'admin')
+                                    <span class="ps-3">Categorias</span>
+                                @endif
+                            </a>
                             <a href="{{ route('tags.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Tags</span> </a>
                             <a href="{{ route('roles.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Roles</span> </a>
                             <a href="{{ route('permissions.index') }}" class="dropdown-item border-radius-md"> <span class="ps-3">Permisos</span> </a>
