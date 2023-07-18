@@ -156,9 +156,9 @@
           <div class="content-wrapper">
             <!-- Content -->
 
-            <div class="container-fluid flex-grow-1 container-p-y">
+            <div class="container-xxl flex-grow-1 container-p-y">
               <!-- Layout Demo -->
-              <div class="layout-demo-wrapper">@yield('content')</div>
+              <div>@yield('content')</div>
               <!--/ Layout Demo -->
             </div>
             <!-- / Content -->

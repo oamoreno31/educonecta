@@ -1,6 +1,5 @@
 <div class="box box-info padding-1">
     <div class="box-body">
-
         <div class="form-group">
             {{ Form::text('posts_id', $post->id, ['class' => 'form-control' . ($errors->has('posts_id') ? ' is-invalid' : ''), 'placeholder' => 'Posts Id', 'hidden' => 'true']) }}
             {!! $errors->first('posts_id', '<div class="invalid-feedback">:message</div>') !!}
@@ -15,7 +14,7 @@
         </div>
         <div class="form-group">
             {{ Form::label('Contenido') }}
-            {{ Form::textarea('content', $comment->content, ['class' => 'form-control' . ($errors->has('content') ? ' is-invalid' : ''), 'placeholder' => 'Contenido', 'row' => '6']) }}
+            {{ Form::textarea('content', $comment->content, ['class' => 'form-control' . ($errors->has('content') ? ' is-invalid' : ''), 'placeholder' => 'Contenido', 'row' => '2']) }}
             {!! $errors->first('content', '<div class="invalid-feedback">:message</div>') !!}
         </div>
         <div class="form-group">

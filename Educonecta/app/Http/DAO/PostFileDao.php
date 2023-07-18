@@ -108,4 +108,25 @@ class PostFileDao
             return $response;
         }
     }
+    /**
+     * Get File count by post
+     */
+    public static function countFilesByPost($postId)
+    {
+        try {
+            $filesCount = PostFile::where('post_id', 'like', $postId)->count();
+            
+            $response = new custResponse();
+            $response->success = true;
+            $response->message = '';
+            $response->detail = $filesCount;
+            return $response;
+        } catch (QueryException $error) {
+            $response = new custResponse();
+            $response->success = false;
+            $response->message = 'Ha ocurrido un error, contactate con un administrador. Code: ' + $error->getCode();
+            $response->detail = $error;
+            return $response;
+        }
+    }
 }

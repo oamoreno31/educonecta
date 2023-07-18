@@ -21,6 +21,7 @@ use App\Http\DAO\PostTagsDao;
 use App\Http\DAO\CommentDao;
 use App\Http\DAO\LikeDao;
 use App\Http\DAO\NFTstorageDao;
+use App\Http\DAO\PostFileDao;
 use App\Models\PostFile;
 // use Barryvdh\DomPDF\PDF;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -50,6 +51,9 @@ class PostController extends Controller
             }
             foreach ($posts as $key => $value) {
 
+                $files = PostFileDao::countFilesByPost($value->id)->detail;
+                $value["filesCount"] = $files;
+
                 $comentarios = CommentDao::countCommentByPost($value->id)->detail;
                 $value["comentsCount"] = $comentarios;
 
@@ -74,7 +78,8 @@ class PostController extends Controller
                     }
                 }
                 $value["tags_names"] = $tags;
-                $value["userLikesPost"] = LikeDao::userLikesPost($value->id, Auth::id());
+                $value["userLikesPost"] = LikeDao::userLikesPost($value->id, Auth::user()->id)->detail;
+                print_r($value["userLikesPost"]);
             }
 
             return view('post.index', compact('posts', "categories"))
@@ -189,7 +194,7 @@ class PostController extends Controller
         foreach ($postFiles as $key_tpostFiles => $value_postFile) {
             $nuevoValor = array(
                 'name' => $value_postFile->file_name,
-                'url' => "https://ipfs.io/ipfs/".$value_postFile->file_hash,
+                'url' => "https://ipfs.io/ipfs/".$value_postFile->file_hash."/".$value_postFile->file_name,
             );
             array_push($files_, $nuevoValor);
         }
@@ -321,7 +326,7 @@ class PostController extends Controller
     {
         // $data_like = Like::where('post_id', 'like', $request->post_id)->where('user_id', 'like', Auth::id())->get();
         // $like = Like::find($data_like[0]->id)->delete();
-        $like = LikeDao::dislike($request->post_id, Auth::id());
+        $like = LikeDao::dislike($post->id, $request->user_id);
 
         return redirect()->route('posts.index');
     }

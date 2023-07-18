@@ -1,40 +1,31 @@
-<div class="media">
-    <div class="media-body">
-        <div class="row" style="padding-left: {{ $level }}%">
-            <div class="col-1">
-                <img src="{{ asset('assets/img/marie.jpg') }}" alt="80" width="80">
-            </div>
-            <div class="col-9">
-                @php
-                    $user = $com->user->name;
-                @endphp
-                <h6 class="mt-0">{{ $user }}</h6>
-                <div class="px-5">
-                    <p>{{ $com->content }}</p>
-                </div>
-            </div>
-            <div class="col-2">
-                <p>{{ time_at($com->created_at) }}</p>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#reply_comment"
+<div class="media" >
+    <div class="media-body" style="padding-left: {{ $level }}%">
+        <div class="row" >
+            @php 
+                $user = $com->user->name; 
+            @endphp
+            <div class="col-lg-10"><strong>{{ $user }}</strong>:<br/> {{ $com->content }}<br/> <small>{{ time_at($com->created_at) }}</small></div>
+            <div class="col-lg-2" style="vertical-align: middle;">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reply_comment"
                     data-id="{{ $com->id }}">
-                    responder
+                    <i class='bx bx-reply' ></i>
                 </button>
             </div>
         </div>
-        @forelse ($com->comments as $com)
-            @php
-                $level = $level + 3;
-            @endphp
-            @include('post.comments')
-        @empty
-        @endforelse
-
-        {{-- @while ()
-            @include('post.comments')
-        @endwhile --}}
     </div>
 </div>
+    @forelse ($com->comments as $com)
+        @php
+            $level = $level + 3;
+        @endphp
+        @include('post.comments')
+    @empty
+    @endforelse
+
+    {{-- @while ()
+        @include('post.comments')
+    @endwhile --}}
+
 
 <script type="text">
 
